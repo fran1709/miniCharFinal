@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 using Antlr4.Runtime;
+using Microsoft.Win32;
 using miniChart.Logica;
 
 namespace miniChart
@@ -31,6 +33,14 @@ namespace miniChart
             // Aqui va la logica para agregar una nueva pestaña
             // Al agregar la nueva pestaña tome en consideracion
             // que se debe agregar un nuevo TabItem y un nuevo TextBox
+
+            TabItem tabitem = new TabItem();
+            TextBox textB = new TextBox();
+
+            Tab.Items.Add(tabitem);
+            //textB <- text0 que viene en el archivo
+            //tabitem <- textB
+            //Tab <- tabitem 
             // dentro del TabControl y que dentro del textbox se agrega el texto del archivo.txt que se subio
         }
         
@@ -61,10 +71,15 @@ namespace miniChart
         }
         public void Upload_File_Button_Click(object? sender, RoutedEventArgs e) 
         {
-            // Aqui va la logica para subir un archivo
-            // AL subir el archivo tome en consideracion
-            // que se agrega el archivo al tabItem y al TextBox que ya esta creado en el MainWindow.xaml
-            // El tabItem tiene por nombre "Principal" y el TextBox tiene por nombre "Pantalla"
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string fileName = openFileDialog.FileName;
+                string fileContent = File.ReadAllText(fileName);
+                Pantalla.Text = fileContent;
+            }
+            
         }
         private void Run_Button_Click(object? sender, RoutedEventArgs e) 
         {
@@ -88,25 +103,28 @@ namespace miniChart
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             MiniCSharpParser parser = new MiniCSharpParser(tokens);
             var errorListener = new MyErrorListener();
-
-            // Asigna el ErrorListener personalizado al parser.
+            
+            parser.ErrorHandler = new MyErrorStrategy();
+            // Asigna el ErrorListener personalizado
+            // al parser.
             parser.RemoveErrorListeners(); // Elimina el ErrorListener predeterminado.
             parser.AddErrorListener(errorListener);
             var context = parser.program();
                 
             if (parser.NumberOfSyntaxErrors > 0)
             {
-                System.Diagnostics.Debug.WriteLine("Compilación fallida: " + parser.NumberOfSyntaxErrors + " error(es) de sintaxis encontrados.");
                 Resultado.Content = "Compilación fallida: " + parser.NumberOfSyntaxErrors +
                                     " error(es) de sintaxis encontrados.";
+                
+                Consola consola = new Consola();
                 foreach (string error in errorListener.SyntaxErrors)
                 {
-                    System.Diagnostics.Debug.WriteLine(error);
+                    consola.SalidaConsola.Text += error + "\n";
                 }
+                consola.Show();
             }
             else
             {
-                System.Diagnostics.Debug.WriteLine("Compilación éxitosa!");
                 Resultado.Content = "Compilación éxitosa!";
             }
         }
