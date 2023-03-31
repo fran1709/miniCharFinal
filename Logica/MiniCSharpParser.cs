@@ -68,6 +68,7 @@ public partial class MiniCSharpParser : Parser {
 		"'!='", "'<'", "'>'", "'<='", "'>='", "'.'", "';'", "','", "'('", "')'", 
 		"'{'", "'}'", "'['", "']'"
 	};
+	
 	private static readonly string[] _SymbolicNames = {
 		null, "LIST", "INT_ID", "STRING_ID", "CHAR_ID", "BOOL_ID", "DOUBLE_ID", 
 		"CLASS", "USING", "VOID", "IF", "ELSE", "WHILE", "FOR", "BREAK", "RETURN", 

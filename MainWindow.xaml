@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:compilador="clr-namespace:miniChart"
+        xmlns:minicart="clr-namespace:miniChart"
         mc:Ignorable="d"
         Background="Teal"
         ResizeMode="NoResize"
@@ -38,24 +38,42 @@
             </TabItem>     
 
         </TabControl>
-        
+        <Button Background="Linen" 
+                Content="Upload file"
+                Click="Upload_File_Button_Click"
+                HorizontalAlignment="Right" 
+                Margin="10,10,15,10" 
+                VerticalAlignment="Top" 
+                Width="75"
+        />
         <Button Background="Linen" 
                 Content="Run" 
                 Click="Run_Button_Click"
                 HorizontalAlignment="Right" 
                 Margin="10,40,15,10" 
                 VerticalAlignment="Top" 
-                Width="75"
-                Height="45"/>
-        
+                Width="75"/>
+        <Button Background="Linen" 
+                Content="Add File"
+                Click="Add_Tab_Button_Click"
+                HorizontalAlignment="Right" 
+                Margin="10,70,15,10" 
+                VerticalAlignment="Top" 
+                Width="75"/>
+        <Button Background="Linen" 
+                Content="Remove File"
+                Click="closeButton_Click"
+                HorizontalAlignment="Right" 
+                Margin="10,100,15,10" 
+                VerticalAlignment="Top" 
+                Width="75"/>
         <Button Background="Linen" 
                 Content="Exit"
                 Click="Exit_Button_Click"
                 HorizontalAlignment="Right" 
                 Margin="10,130,15,10" 
                 VerticalAlignment="Top" 
-                Width="75"
-                Height="45"/>
+                Width="75"/>
         <Label
             BorderThickness="1"
             Name="Output"
@@ -64,7 +82,7 @@
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
             Margin="0,0,10,10"
-            ></Label>
+        ></Label>
         <Label
             BorderThickness="1"
             Name="TResultado"

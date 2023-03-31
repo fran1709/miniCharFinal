@@ -1,0 +1,6 @@
+C:\Users\franj\RiderProjects\miniChart\obj\Debug\net7.0-windows\MiniCSharpScanner.cs
+C:\Users\franj\RiderProjects\miniChart\obj\Debug\net7.0-windows\MiniCSharpParser.cs
+C:\Users\franj\RiderProjects\miniChart\obj\Debug\net7.0-windows\MiniCSharpParserListener.cs
+C:\Users\franj\RiderProjects\miniChart\obj\Debug\net7.0-windows\MiniCSharpParserBaseListener.cs
+C:\Users\franj\RiderProjects\miniChart\obj\Debug\net7.0-windows\MiniCSharpParserVisitor.cs
+C:\Users\franj\RiderProjects\miniChart\obj\Debug\net7.0-windows\MiniCSharpParserBaseVisitor.cs

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Windows;
 using Antlr4.Runtime;
+using miniChart.Logica;
 
 namespace miniChart
 {
@@ -24,6 +26,20 @@ namespace miniChart
             
             InitializeComponent(); 
         }
+        private void Add_Tab_Button_Click(object sender, EventArgs e)
+        {
+            // Aqui va la logica para agregar una nueva pestaña
+            // Al agregar la nueva pestaña tome en consideracion
+            // que se debe agregar un nuevo TabItem y un nuevo TextBox
+            // dentro del TabControl y que dentro del textbox se agrega el texto del archivo.txt que se subio
+        }
+        
+        private void closeButton_Click(object sender, EventArgs e)
+        {
+            // Eliminar la pestaña seleccionada TabItem
+            // Elimina una pestaña del TabControl, tome en cuenta que al eliminar una pestaña 
+            // tambien se debe eliminar el TextBox que esta dentro del TabControl
+        }
 
         private void Pantalla_SelectionChanged(object sender, EventArgs e)
         {
@@ -43,7 +59,13 @@ namespace miniChart
             // Actualiza el texto de un label o de otro TextBox con el número de línea y columna.
             Output.Content = $"Línea: {line} \nColumna: {column}";
         }
-
+        public void Upload_File_Button_Click(object? sender, RoutedEventArgs e) 
+        {
+            // Aqui va la logica para subir un archivo
+            // AL subir el archivo tome en consideracion
+            // que se agrega el archivo al tabItem y al TextBox que ya esta creado en el MainWindow.xaml
+            // El tabItem tiene por nombre "Principal" y el TextBox tiene por nombre "Pantalla"
+        }
         private void Run_Button_Click(object? sender, RoutedEventArgs e) 
         {
             // Aqui va la logica para correr el codigo
@@ -65,7 +87,11 @@ namespace miniChart
             var lexer = new MiniCSharpScanner(pCode);
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             MiniCSharpParser parser = new MiniCSharpParser(tokens);
-            
+            var errorListener = new MyErrorListener();
+
+            // Asigna el ErrorListener personalizado al parser.
+            parser.RemoveErrorListeners(); // Elimina el ErrorListener predeterminado.
+            parser.AddErrorListener(errorListener);
             var context = parser.program();
                 
             if (parser.NumberOfSyntaxErrors > 0)
@@ -73,15 +99,15 @@ namespace miniChart
                 System.Diagnostics.Debug.WriteLine("Compilación fallida: " + parser.NumberOfSyntaxErrors + " error(es) de sintaxis encontrados.");
                 Resultado.Content = "Compilación fallida: " + parser.NumberOfSyntaxErrors +
                                     " error(es) de sintaxis encontrados.";
-                System.Diagnostics.Debug.WriteLine(parser.ErrorListeners.ToString());
-                Console.WriteLine("Compilación fallida: " + parser.NumberOfSyntaxErrors +
-                                  " error(es) de sintaxis encontrados.");
+                foreach (string error in errorListener.SyntaxErrors)
+                {
+                    System.Diagnostics.Debug.WriteLine(error);
+                }
             }
             else
             {
                 System.Diagnostics.Debug.WriteLine("Compilación éxitosa!");
                 Resultado.Content = "Compilación éxitosa!";
-                Console.WriteLine("Compilación éxitosa!");
             }
         }
     }
