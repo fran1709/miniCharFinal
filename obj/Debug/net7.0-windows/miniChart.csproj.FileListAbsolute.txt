@@ -54,3 +54,5 @@ C:\Users\Mariana Artavia Vene\Documents\GitHub\miniCharFinal\obj\Debug\net7.0-wi
 C:\Users\Mariana Artavia Vene\Documents\GitHub\miniCharFinal\obj\Debug\net7.0-windows\miniChart.pdb
 C:\Users\Mariana Artavia Vene\Documents\GitHub\miniCharFinal\obj\Debug\net7.0-windows\miniChart.genruntimeconfig.cache
 C:\Users\Mariana Artavia Vene\Documents\GitHub\miniCharFinal\obj\Debug\net7.0-windows\ref\miniChart.dll
+C:\Users\franj\RiderProjects\miniChart\obj\Debug\net7.0-windows\Consola.g.cs
+C:\Users\franj\RiderProjects\miniChart\obj\Debug\net7.0-windows\Consola.baml

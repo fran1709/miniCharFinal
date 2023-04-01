@@ -34,10 +34,17 @@ namespace miniChart
             // Al agregar la nueva pestaña tome en consideracion
             // que se debe agregar un nuevo TabItem y un nuevo TextBox
 
-            TabItem tabitem = new TabItem();
-            TextBox textB = new TextBox();
+            // Crear un nuevo TabItem con un TextBox
+            TabItem tabItem = new TabItem();
+            tabItem.Header = "New Tab";
+            TextBox textBox = new TextBox();
+            textBox.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
+            textBox.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
+            tabItem.Content = textBox;
+            Tab.Items.Add(tabItem);
 
-            Tab.Items.Add(tabitem);
+            // Seleccionar la nueva pestaña
+            Tab.SelectedItem = tabItem;
             //textB <- text0 que viene en el archivo
             //tabitem <- textB
             //Tab <- tabitem 
@@ -49,6 +56,7 @@ namespace miniChart
             // Eliminar la pestaña seleccionada TabItem
             // Elimina una pestaña del TabControl, tome en cuenta que al eliminar una pestaña 
             // tambien se debe eliminar el TextBox que esta dentro del TabControl
+            Tab.Items.Remove(Tab.SelectedItem);
         }
 
         private void Pantalla_SelectionChanged(object sender, EventArgs e)
@@ -77,9 +85,19 @@ namespace miniChart
             {
                 string fileName = openFileDialog.FileName;
                 string fileContent = File.ReadAllText(fileName);
-                Pantalla.Text = fileContent;
+
+                TabItem activeTab = (TabItem)Tab.SelectedItem;
+                var onlyFileName = Path.GetFileName(fileName);
+                activeTab.Header = onlyFileName;
+                TextBox textBox = (TextBox)activeTab.Content;
+                textBox.Text = fileContent;
+            }else
+            {
+                // Manejar el caso en que el usuario no seleccionó un archivo
+                Consola consola = new Consola();
+                consola.SalidaConsola.Text = "Archivo no seleccionado!";
+                consola.Show();
             }
-            
         }
         private void Run_Button_Click(object? sender, RoutedEventArgs e) 
         {
@@ -87,7 +105,9 @@ namespace miniChart
             // AL correr el codigo tome en consideracion
             // que el resultado de la c se muestra en una nueva ventana llamada Consola
             // en el texbox SalidaConsola
-            RunMiniChart(CharStreams.fromString(Pantalla.Text.ToLower()));
+            TabItem activeTab = (TabItem)Tab.SelectedItem;
+            TextBox textBox = (TextBox)activeTab.Content;
+            RunMiniChart(CharStreams.fromString(textBox.Text.ToLower()));
         }
         
         private void Exit_Button_Click(object? sender, RoutedEventArgs e)
