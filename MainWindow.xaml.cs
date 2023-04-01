@@ -130,13 +130,15 @@ namespace miniChart
             parser.RemoveErrorListeners(); // Elimina el ErrorListener predeterminado.
             parser.AddErrorListener(errorListener);
             var context = parser.program();
-                
+            
+            Consola consola = new Consola();   
             if (parser.NumberOfSyntaxErrors > 0)
             {
                 Resultado.Content = "Compilación fallida: " + parser.NumberOfSyntaxErrors +
-                                    " error(es) de sintaxis encontrados.";
-                
-                Consola consola = new Consola();
+                                    " error(es) de sintaxis encontrados:";
+
+
+                consola.SalidaConsola.Text = Resultado.Content.ToString() + "\n";
                 foreach (string error in errorListener.SyntaxErrors)
                 {
                     consola.SalidaConsola.Text += error + "\n";
@@ -146,6 +148,8 @@ namespace miniChart
             else
             {
                 Resultado.Content = "Compilación éxitosa!";
+                consola.SalidaConsola.Text = Resultado.Content.ToString() + "\n";
+                consola.Show();
             }
         }
     }
