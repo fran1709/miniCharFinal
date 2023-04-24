@@ -129,7 +129,8 @@ namespace miniChart
             // al parser.
             parser.RemoveErrorListeners(); // Elimina el ErrorListener predeterminado.
             parser.AddErrorListener(errorListener);
-            var context = parser.program();
+            
+            var treeContext = parser.program();
             
             Consola consola = new Consola();   
             if (parser.NumberOfSyntaxErrors > 0)
@@ -147,6 +148,9 @@ namespace miniChart
             }
             else
             {
+                CSharpContextual mv = new CSharpContextual();
+                mv.Visit(treeContext);
+                
                 Resultado.Content = "Compilación éxitosa!";
                 consola.SalidaConsola.Text = Resultado.Content.ToString() + "\n";
                 consola.Show();
