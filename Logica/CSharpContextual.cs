@@ -16,31 +16,55 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
 
     public override object VisitVarDeclaAST(MiniCSharpParser.VarDeclaASTContext context)
     {
+        Visit(context.type());
+        Visit(context.ident(0));
+        for (int i = 1; i < context.ident().Length; i++)
+        {
+            Visit(context.ident(i));
+        }
         return null;
     }
 
     public override object VisitClassDeclaAST(MiniCSharpParser.ClassDeclaASTContext context)
     {
+        Visit(context.ident());
+        for (int i = 0; i < context.varDecl().Length; i++)
+        {
+            Visit(context.varDecl(i));
+        }
         return null;
     }
 
     public override object VisitMethDeclaAST(MiniCSharpParser.MethDeclaASTContext context)
     {
+        
         return null;
     }
 
     public override object VisitFormParsAST(MiniCSharpParser.FormParsASTContext context)
     {
+        Visit(context.type(0));
+        Visit(context.ident(0));
+        for (int i = 0; i < context.type().Length; i++)
+        {
+            Visit(context.type(i));
+        }
+        for (int i = 0; i < context.ident().Length; i++)
+        {
+            Visit(context.ident(i));
+        }
         return null;
     }
 
     public override object VisitTypeAST(MiniCSharpParser.TypeASTContext context)
     {
+        Visit(context.ident());
         return null;
     }
 
     public override object VisitAssignStatementAST(MiniCSharpParser.AssignStatementASTContext context)
     {
+        
         return null;
     }
 

@@ -148,7 +148,7 @@ namespace miniChart
             }
             else
             {
-                CSharpContextual mv = new CSharpContextual();
+                var mv = new CSharpContextual();
                 mv.Visit(treeContext);
                 
                 Resultado.Content = "Compilación éxitosa!";
