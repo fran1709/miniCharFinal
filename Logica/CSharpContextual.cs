@@ -1,33 +1,56 @@
 ﻿using System;
-
+using Antlr4.Runtime;
 namespace miniChart.Logica;
 
 public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
 {
+    private CSTablaSimbolos laCsTablaSimbolos;
+
+    public CSharpContextual()
+    {
+        this.laCsTablaSimbolos = new CSTablaSimbolos();
+    }
+    private String showErrorPosition(IToken t)
+    {
+        return " Fila: " + t.Line + " , Columna: " + (t.Column + 1);
+    }
+
     // program : (using)* CLASS ident LEFTBRACK (varDecl | classDecl | methodDecl)* RIGHTBRACK EOF
     public override object VisitProgramAST(MiniCSharpParser.ProgramASTContext context)
     {
+        //Visita a los using
         for (int i = 0; i < context.@using().Length; i++)
         {
             Visit(context.@using(i));
         }
         
-        Visit(context.ident()); //Agregar la clase a la tabla con este ident 
-      
+        //Agregar la clase PRINCIPAL a la tabla 
+        Visit(context.ident());  
+        IToken id = context.ident().Start;
+        laCsTablaSimbolos.openScope();
+        laCsTablaSimbolos.insertar(id, 0,8);
+        
+        //Vista a la declaración de variables
         for (int i = 0; i < context.varDecl().Length; i++)
         {
             Visit(context.varDecl(i));
         }  
-          
+        
+        //Vista a la declaración de clases
         for (int i = 0; i < context.classDecl().Length; i++)
         {
             Visit(context.classDecl(i));
         }
-          
+        
+        //Declaración de constantes?
+        
+        //Vista a la declaración de métodos
         for (int i = 0; i < context.methodDecl().Length; i++)
         {
             Visit(context.methodDecl(i));
         }
+        laCsTablaSimbolos.Imprimir(); //Impresión de la tabla como guía
+        laCsTablaSimbolos.consola.Show();
         return null;
     }
 
@@ -41,11 +64,24 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
     // varDecl : type ident (COMMA ident)* SEMICOLON   
     public override object VisitVarDeclaAST(MiniCSharpParser.VarDeclaASTContext context)
     {
-        Visit(context.type());
-        Visit(context.ident(0));
-        for (int i = 1; i < context.ident().Length; i++)
+        //Se recorren todas las variables (cuando se declaran de un mismo tipo separadas por coma)
+        for (int i = 0; i < context.ident().Length; i++)
         {
-            Visit(context.ident(i));
+            int idType = (int) Visit(context.type()); //Se verifica el tipo de datos de la variable
+            IToken id = context.ident(i).Start;
+            if (idType == 5) //Si se detecta que es un arreglo de int se guarda en la tabla como tipo arreglo 
+                //Además se guarda con tipo de datos int
+            {
+                laCsTablaSimbolos.insertar(id, 1, 0);
+            } else if (idType == 6) //Si se detecta que es un arreglo de char se guarda en la tabla como tipo arreglo 
+                //Además se guarda con tipo de datos char
+            {
+                laCsTablaSimbolos.insertar(id, 1, 2);
+            }
+            else if (idType != -1) //Si la variable tiene un tipo válido se guarda en la tabla con tipo variable
+            {
+                laCsTablaSimbolos.insertar(id, 2, idType);
+            }
         }
         return null;
     }
@@ -53,7 +89,11 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
     // classDecl : CLASS ident LEFTBRACK (varDecl)* RIGHTBRACK  
     public override object VisitClassDeclaAST(MiniCSharpParser.ClassDeclaASTContext context)
     {
-        Visit(context.ident());
+        IToken id = context.ident().Start;
+        laCsTablaSimbolos.openScope();
+        laCsTablaSimbolos.insertar(id, 0,8); //Se guarda la clase en la tabla con tipo tabla y tipo de dato null
+        
+        //Se recorren las declaraciones de las variables de la clase
         for (int i = 0; i < context.varDecl().Length; i++)
         {
             Visit(context.varDecl(i));
@@ -64,15 +104,21 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
     // methodDecl : (type | VOID) ident LEFTPAREN formPars? RIGHTPAREN block
     public override object VisitMethDeclaAST(MiniCSharpParser.MethDeclaASTContext context)
     {
+        int idType = 7; //Tipo de datos del método cuando es void
         if (context.VOID() == null)
         {
-            Visit(context.type());
+            idType = (int) Visit(context.type());
         }
-        Visit(context.ident());
+        IToken id = context.ident().Start;
+        laCsTablaSimbolos.insertar(id, 4, idType); //Se guarda el método en la tabla con tipo método
+        
+        //Visita a los parametros del método
         if (context.formPars() != null)
         {
             Visit(context.formPars());
         }
+        
+        //Visita al bloque del método
         Visit(context.block());
         return null;
     }
@@ -92,10 +138,40 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
     }
 
     //  type : ident (LEFTSBRACK RIGHTSBRACK)? 
+    //Verificación de tipos
     public override object VisitTypeAST(MiniCSharpParser.TypeASTContext context)
     {
-        Visit(context.ident());
-        return null;
+        int result = -1;
+        if (context.ident().Start.Text.Equals("int"))
+        {
+            result = 0;
+        } else if (context.ident().Start.Text.Equals("double"))
+        {
+            result = 1;
+        } else if (context.ident().Start.Text.Equals("char"))
+        {
+            result = 2;
+        } else if (context.ident().Start.Text.Equals("string"))
+        {
+            result = 3;
+        }
+        else if (context.ident().Start.Text.Equals("bool"))
+        {
+            result = 4;
+        }
+        else if (context.ident().Start.Text.Equals("int[]"))
+        {
+            result = 5; 
+        }
+        else if (context.ident().Start.Text.Equals("char[]"))
+        {
+            result = 6; 
+        }
+        else
+        {
+            laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de tipos: Tipo: \"" + context.ident().GetText() + "\" no es un tipo válido." + showErrorPosition(context.ident().Start) + "\n";
+        }
+        return result;
     }
 
     // statement : designator (ASSIGN expr | LEFTPAREN actPars? RIGHTPAREN | PLUSPLUS | MINUSMINUS) SEMICOLON 
@@ -353,35 +429,35 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
     public override object VisitCharconstFactorAST(MiniCSharpParser.CharconstFactorASTContext context)
     {
         // nothing to visit
-        return null;
+        return 3; // 3 es char
     }
 
     // factor : STRINGCONST
     public override object VisitStrconstFactorAST(MiniCSharpParser.StrconstFactorASTContext context)
     {
         // nothing to visit
-        return null;
+        return 4; // 4 es string
     }
 
     // factor : INT 
     public override object VisitIntFactorAST(MiniCSharpParser.IntFactorASTContext context)
     {
         // nothing to visit
-        return null;
+        return 1; // int es 1
     }
 
     // factor : DOUBLE
     public override object VisitDoubFactorAST(MiniCSharpParser.DoubFactorASTContext context)
     {
         // nothing to visit
-        return null;
+        return 2; // 2 es double
     }
 
     // factor : BOOL
     public override object VisitBoolFactorAST(MiniCSharpParser.BoolFactorASTContext context)
     {
         // nothing to visit
-        return null;
+        return 5; // 5  es bool
     }
 
     // factor : NEW ident
@@ -413,8 +489,6 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
         }
         return null;
     }
-
-    
 
     // ident : INT_ID
     public override object VisitIntIdIdentAST(MiniCSharpParser.IntIdIdentASTContext context)
