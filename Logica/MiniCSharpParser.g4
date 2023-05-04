@@ -59,19 +59,19 @@ factor : designator (LEFTPAREN (actPars)? RIGHTPAREN)?                          
 
 designator : ident (DOT ident | LEFTSBRACK expr RIGHTSBRACK)*                                                  #designatorAST;
 
-relop : EQUALS                                                                                                 #equalsRelopAST 
-        | NOTEQUALS                                                                                            #notEqualsRelopAST
-        | GREATERTHAN                                                                                          #greatThanRelopAST
-        | GREATOREQUALS                                                                                        #greatOrEqualRelopAST
-        | LESSTHAN                                                                                             #lessThanRelopAST
-        | LESSOREQUALS                                                                                         #lessOrEqualRelopAST; 
+relop : EQUALS                                                                                                  
+        | NOTEQUALS                                                                                            
+        | GREATERTHAN                                                                                          
+        | GREATOREQUALS                                                                                        
+        | LESSTHAN                                                                                             
+        | LESSOREQUALS                                                                                         #relopAST; 
 
-addop : PLUS                                                                                                   #plusAddopAST 
-        | MINUS                                                                                                #minusAddopAST;
+addop : PLUS                                                                                                   
+        | MINUS                                                                                                #addopAST;
 
-mulop : MULT                                                                                                   #multMulopAST 
-        | DIV                                                                                                  #divMulopAST 
-        | MOD                                                                                                  #modMulopAST;
+mulop : MULT                                                                                                    
+        | DIV                                                                                                  
+        | MOD                                                                                                  #mulopAST;
 
 ident : INT_ID                                                                                                 #intIdIdentAST
         | CHAR_ID                                                                                              #charIdIdentAST

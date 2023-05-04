@@ -12,29 +12,21 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
             Visit(context.@using(i));
         }
         
-        Visit(context.ident());
-        if (context.varDecl(0) != null)
+        Visit(context.ident()); //Agregar la clase a la tabla con este ident 
+      
+        for (int i = 0; i < context.varDecl().Length; i++)
         {
-            for (int i = 0; i < context.varDecl().Length; i++)
-            {
-                Visit(context.varDecl(i));
-            }
+            Visit(context.varDecl(i));
+        }  
+          
+        for (int i = 0; i < context.classDecl().Length; i++)
+        {
+            Visit(context.classDecl(i));
         }
-
-        if (context.classDecl(0) != null)
+          
+        for (int i = 0; i < context.methodDecl().Length; i++)
         {
-            for (int i = 0; i < context.classDecl().Length; i++)
-            {
-               Visit(context.classDecl(i));
-            } 
-        }
-
-        if (context.methodDecl(0)!= null)
-        {
-          for (int i = 0; i < context.methodDecl().Length; i++)
-          {
-              Visit(context.methodDecl(i));
-          }  
+            Visit(context.methodDecl(i));
         }
         return null;
     }
@@ -90,23 +82,12 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
     {
         Visit(context.type(0));
         Visit(context.ident(0));
-        
-        if (context.ident(0)!=null)
-        {
-            for (int i = 0; i < context.ident().Length; i++)
-            {
-                Visit(context.ident(i));
-            }  
-        }
 
-        if (context.type(0) != null)
+        for (int i = 1; context.type().Length > i; i++)
         {
-            for (int i = 0; i < context.type().Length; i++)
-            {
-                Visit(context.type(i));
-            }
+            Visit(context.type(i));
+            Visit(context.ident(i));
         }
-
         return null;
     }
 
@@ -256,21 +237,17 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
     // block : LEFTBRACK (varDecl | statement)* RIGHTBRACK
     public override object VisitBlockAST(MiniCSharpParser.BlockASTContext context)
     {
-        if (context.varDecl(0) != null)
+        for (int i = 0; i < context.varDecl().Length; i++)
         {
-            for (int i = 0; i < context.varDecl().Length; i++)
-            {
-                Visit(context.varDecl(i));
-            }
+            Visit(context.varDecl(i));
         }
 
-        if (context.statement(0) != null)
+       
+        for (int i = 0; i < context.statement().Length; i++)
         {
-            for (int i = 0; i < context.statement().Length; i++)
-            {
-                Visit(context.statement(i));
-            }
+            Visit(context.statement(i));
         }
+        
         return null;
     }
 
@@ -340,19 +317,11 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
             Visit(context.cast());
         }
         Visit(context.term(0));
-        if (context.addop().Length >= 1)
+        
+        for (int i = 1; i < context.term().Length; i++)
         {
-            for (int i = 0; i < context.addop().Length; i++)
-            {
-                Visit(context.addop(i));
-            }
-        }
-        if (context.term().Length > 1)
-        {
-            for (int i = 1; i < context.term().Length; i++)
-            {
-                Visit(context.term(i));
-            }
+            Visit(context.addop(i - 1));
+            Visit(context.term(i));
         }
         return null;
     }
@@ -361,19 +330,10 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
     public override object VisitTermAST(MiniCSharpParser.TermASTContext context)
     {
         Visit(context.factor(0));
-        if (context.mulop().Length >= 1)
+        for (int i = 1; i < context.factor().Length; i++)
         {
-            for (int i = 0; i < context.mulop().Length; i++)
-            {
-                Visit(context.mulop(i));
-            }
-        }
-        if (context.factor().Length > 1)
-        {
-            for (int i = 1; i < context.factor().Length; i++)
-            {
-                Visit(context.factor(i));
-            }
+            Visit(context.mulop(i - 1));
+            Visit(context.factor(i));
         }
         return null;
     }
@@ -442,100 +402,19 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
     public override object VisitDesignatorAST(MiniCSharpParser.DesignatorASTContext context)
     {
         Visit(context.ident(0));
-        if (context.ident().Length > 1)
+        for (int i = 1; i < context.ident().Length; i++)
         {
-            for (int i = 1; i < context.ident().Length; i++)
-            {
-                Visit(context.ident(i));
-            }
+            Visit(context.ident(i));
         }
-
-        if (context.expr().Length >= 1)
+        
+        for (int i = 0; i < context.expr().Length; i++)
         {
-            for (int i = 0; i < context.expr().Length; i++)
-            {
-                Visit(context.expr(i));
-            }
+            Visit(context.expr(i));
         }
         return null;
     }
 
-    // relop : EQUALS
-    public override object VisitEqualsRelopAST(MiniCSharpParser.EqualsRelopASTContext context)
-    {
-        // nothing to visit
-        return null;
-    }
-
-    // relop : NOTEQUALS
-    public override object VisitNotEqualsRelopAST(MiniCSharpParser.NotEqualsRelopASTContext context)
-    {
-        // nothing to visit
-        return null;
-    }
-
-    // relop : GREATERTHAN
-    public override object VisitGreatThanRelopAST(MiniCSharpParser.GreatThanRelopASTContext context)
-    {
-        // nothing to visit
-        return null;
-    }
-
-    // relop : GREATOREQUALS
-    public override object VisitGreatOrEqualRelopAST(MiniCSharpParser.GreatOrEqualRelopASTContext context)
-    {
-        // nothing to visit
-        return null;
-    }
-
-    // relop : LESSTHAN
-    public override object VisitLessThanRelopAST(MiniCSharpParser.LessThanRelopASTContext context)
-    {
-        // nothing to visit
-        return null;
-    }
-
-    // relop : LESSOREQUALS
-    public override object VisitLessOrEqualRelopAST(MiniCSharpParser.LessOrEqualRelopASTContext context)
-    {
-        // nothing to visit
-        return null;
-    }
-
-    // addop : PLUS 
-    public override object VisitPlusAddopAST(MiniCSharpParser.PlusAddopASTContext context)
-    {
-        // nothing to visit
-        return null;
-    }
-
-    // addop : MINUS 
-    public override object VisitMinusAddopAST(MiniCSharpParser.MinusAddopASTContext context)
-    {
-        // nothing to visit
-        return null;
-    }
-
-    // mulop : MULT
-    public override object VisitMultMulopAST(MiniCSharpParser.MultMulopASTContext context)
-    {
-        // nothing to visit
-        return null;
-    }
-
-    // mulop : DIV
-    public override object VisitDivMulopAST(MiniCSharpParser.DivMulopASTContext context)
-    {
-        // nothing to visit
-        return null;
-    }
-
-    // mulop : MOD
-    public override object VisitModMulopAST(MiniCSharpParser.ModMulopASTContext context)
-    {
-        // nothing to visit
-        return null;
-    }
+    
 
     // ident : INT_ID
     public override object VisitIntIdIdentAST(MiniCSharpParser.IntIdIdentASTContext context)
