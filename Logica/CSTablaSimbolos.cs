@@ -2,36 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using Antlr4.Runtime;
+using miniChart.Logica.TypeManager;
 
 namespace miniChart.Logica;
 
 public class CSTablaSimbolos
 {
-    LinkedList<Object> tabla;
-    private static int nivelActual;
+    static LinkedList<Object> tabla;
+    public int nivelActual;
     public Consola consola; 
 
     public class Ident
     {
         internal IToken tok;
         internal int type;
-        internal int nivel;
+        public static int nivel;
         int valor;
         internal int dataType;
-
-        public Ident(IToken tok, int type, int dataType)
-        {
-            this.tok = tok;
-            this.type = type;
-            nivel = nivelActual;
-            valor = 0;
-            this.dataType = dataType;
-        }
-
-        public void setValue(int v)
-        {
-            valor = v;
-        }
     }
 
     public CSTablaSimbolos()
@@ -41,20 +28,33 @@ public class CSTablaSimbolos
         consola = new Consola();
     }
     
-    public void insertar(IToken id, int tipo, int dataType)
+    public void insertar(Tipo ident)
     {
-        Ident i = new Ident(id,tipo,dataType);
-        tabla.AddFirst(i);
+        ident.nivel = nivelActual;
+        tabla.AddLast(ident);
     }
     
-    public Ident buscar(String nombre)
+    public Tipo buscar(String nombre)
     {
         foreach (object id in tabla)
         {
-            Ident ident = id as Ident;
+            Tipo ident = id as Tipo;
             if (ident.tok.Text.Equals(nombre))
             {
                 return ident;
+            }
+        }
+        return null;
+    }
+    
+    public Clase buscarClase(string nombre)
+    {
+        foreach (object id in tabla)
+        {
+            Clase clase = id as Clase;
+            if (clase != null && clase.tok.Text.Equals(nombre))
+            {
+                return clase;
             }
         }
         return null;
@@ -66,13 +66,13 @@ public class CSTablaSimbolos
     
     public void CloseScope()
     {
-        foreach (var item in tabla.ToList())
+        /*foreach (var item in tabla.ToList())
         {
-            if (((Ident)item).nivel == nivelActual)
+            if (((Tipo)item).nivel == nivelActual)
             {
                 tabla.Remove(item);
             }
-        }
+        }*/
         nivelActual--;
     }
     
@@ -82,11 +82,10 @@ public class CSTablaSimbolos
         consola.SalidaConsola.Text += "----- INICIO TABLA ------\n";
         foreach (object id in tabla)
         {
-            IToken s = (IToken)((Ident)id).tok;
-            Console.WriteLine($"Nombre: {s.Text} - {((Ident)id).nivel} - {((Ident)id).type}");
-            consola.SalidaConsola.Text += $"Nombre: {s.Text} - {((Ident)id).nivel} - {((Ident)id).type} - {((Ident)id).dataType}\n";
+            Console.WriteLine(id.ToString());
+            consola.SalidaConsola.Text += id.ToString();
         }
         Console.WriteLine("----- FIN TABLA ------");
-        consola.SalidaConsola.Text += "----- FIN TABLA ------";
+        consola.SalidaConsola.Text += "----- FIN TABLA ------\n";
     }
 }

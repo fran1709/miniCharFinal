@@ -1,0 +1,45 @@
+class P
+{
+	class Table {
+		int[] pos;
+		int[] neg;
+               numerito x;
+	}
+
+	void SetMsg () {
+    msg = new char[5];
+    msg[0] = 'E';
+    msg[1] = 'r';
+    msg[2] = 'r';
+    msg[3] = 'r';
+    msg[4] = msg[3];
+    read(msg[3]) ;    
+  }
+}
+
+class P
+{
+	class Table {
+		int[] pos;
+		int[] neg;
+               numerito x;
+	}
+	P persona;
+	Table tabla;
+
+	void SetMsg () {
+    msg = new char[5];
+    msg[0] = 'E';
+    msg[1] = 'r';
+    msg[2] = 'r';
+    msg[3] = 'r';
+    msg[4] = msg[3];
+    read(msg[3]) ;    
+  }
+}
+
+class Persona {
+	int edad, x;
+	string nombre;
+      int[] array;
+}

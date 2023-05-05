@@ -1,5 +1,7 @@
 ﻿using System;
 using Antlr4.Runtime;
+using miniChart.Logica.TypeManager;
+
 namespace miniChart.Logica;
 
 public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
@@ -25,22 +27,25 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
         }
         
         //Agregar la clase PRINCIPAL a la tabla 
-        Visit(context.ident());  
         IToken id = context.ident().Start;
         laCsTablaSimbolos.openScope();
-        laCsTablaSimbolos.insertar(id, 0,8);
+        if (Clase.isClase(id.Text))
+        {
+            Clase clase = new Clase(id);
+            laCsTablaSimbolos.insertar(clase);
+        }
+
+        //Vista a la declaración de clases
+        for (int i = 0; i < context.classDecl().Length; i++)
+        {
+            Visit(context.classDecl(i));
+        }
         
         //Vista a la declaración de variables
         for (int i = 0; i < context.varDecl().Length; i++)
         {
             Visit(context.varDecl(i));
         }  
-        
-        //Vista a la declaración de clases
-        for (int i = 0; i < context.classDecl().Length; i++)
-        {
-            Visit(context.classDecl(i));
-        }
         
         //Declaración de constantes?
         
@@ -67,22 +72,38 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
         //Se recorren todas las variables (cuando se declaran de un mismo tipo separadas por coma)
         for (int i = 0; i < context.ident().Length; i++)
         {
-            int idType = (int) Visit(context.type()); //Se verifica el tipo de datos de la variable
+            int idType = (int)Visit(context.type()); //Se verifica el tipo de datos de la variable
             IToken id = context.ident(i).Start;
-            if (idType == 5) //Si se detecta que es un arreglo de int se guarda en la tabla como tipo arreglo 
-                //Además se guarda con tipo de datos int
+            if (TipoBasico.isTipoBasico(context.type().GetText()))
             {
-                laCsTablaSimbolos.insertar(id, 1, 0);
-            } else if (idType == 6) //Si se detecta que es un arreglo de char se guarda en la tabla como tipo arreglo 
-                //Además se guarda con tipo de datos char
-            {
-                laCsTablaSimbolos.insertar(id, 1, 2);
+                TipoBasico tipo = new TipoBasico(id, idType);
+                laCsTablaSimbolos.insertar(tipo);
+
             }
-            else if (idType != -1) //Si la variable tiene un tipo válido se guarda en la tabla con tipo variable
+
+            if (Arreglo.isTipoArreglo(context.type().GetText()))
             {
-                laCsTablaSimbolos.insertar(id, 2, idType);
+                Arreglo arreglo = new Arreglo(id, idType);
+                laCsTablaSimbolos.insertar(arreglo);
+            }
+
+            if (TipoClase.IsTipoClase(context.type().GetText()))
+            {
+                Clase claseBuscada = this.laCsTablaSimbolos.buscarClase(context.type().GetText());
+                if (claseBuscada != null)
+                {
+                    TipoClase tipoClase = new TipoClase(id, context.type().GetText());
+                    laCsTablaSimbolos.insertar(tipoClase);
+                }
+                else
+                {
+                    laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de tipos: Tipo: \"" + context.type().GetText() + "\" no es un tipo válido." + showErrorPosition(context.type().Start) + "\n";
+
+                }
+
             }
         }
+
         return null;
     }
 
@@ -90,14 +111,18 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
     public override object VisitClassDeclaAST(MiniCSharpParser.ClassDeclaASTContext context)
     {
         IToken id = context.ident().Start;
+        if (Clase.isClase(id.Text))
+        {
+            Clase clase = new Clase(id);
+            laCsTablaSimbolos.insertar(clase);
+        }
         laCsTablaSimbolos.openScope();
-        laCsTablaSimbolos.insertar(id, 0,8); //Se guarda la clase en la tabla con tipo tabla y tipo de dato null
-        
         //Se recorren las declaraciones de las variables de la clase
         for (int i = 0; i < context.varDecl().Length; i++)
         {
             Visit(context.varDecl(i));
         }
+        laCsTablaSimbolos.CloseScope();
         return null;
     }
 
@@ -110,8 +135,7 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
             idType = (int) Visit(context.type());
         }
         IToken id = context.ident().Start;
-        laCsTablaSimbolos.insertar(id, 4, idType); //Se guarda el método en la tabla con tipo método
-        
+
         //Visita a los parametros del método
         if (context.formPars() != null)
         {
@@ -141,31 +165,38 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
     //Verificación de tipos
     public override object VisitTypeAST(MiniCSharpParser.TypeASTContext context)
     {
-        int result = -1;
-        if (context.ident().Start.Text.Equals("int"))
+        TipoBasico.TiposBasicos result = TipoBasico.TiposBasicos.Error;
+        if (context.ident().GetText().Equals("int"))
         {
-            result = 0;
-        } else if (context.ident().Start.Text.Equals("double"))
+            result = TipoBasico.TiposBasicos.Int;
+        } 
+        else if (context.ident().GetText().Equals("double"))
         {
-            result = 1;
-        } else if (context.ident().Start.Text.Equals("char"))
+            result = TipoBasico.TiposBasicos.Double;
+        } 
+        else if (context.ident().GetText().Equals("char"))
         {
-            result = 2;
-        } else if (context.ident().Start.Text.Equals("string"))
+            result = TipoBasico.TiposBasicos.Char;
+        } 
+        else if (context.ident().GetText().Equals("string"))
         {
-            result = 3;
+            result = TipoBasico.TiposBasicos.String;
         }
-        else if (context.ident().Start.Text.Equals("bool"))
+        else if (context.ident().GetText().Equals("boolean"))
         {
-            result = 4;
+            result = TipoBasico.TiposBasicos.Boolean;
         }
-        else if (context.ident().Start.Text.Equals("int[]"))
+        else if (context.ident().GetText().Equals("int[]"))
         {
-            result = 5; 
+            result = TipoBasico.TiposBasicos.Int;
         }
-        else if (context.ident().Start.Text.Equals("char[]"))
+        else if (context.ident().GetText().Equals("char[]"))
         {
-            result = 6; 
+            result = TipoBasico.TiposBasicos.Char;
+        }
+        else if (Clase.isClase(context.ident().GetText()))
+        {
+            result = TipoBasico.TiposBasicos.Error;
         }
         else
         {

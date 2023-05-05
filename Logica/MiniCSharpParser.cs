@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from C:/Users/franj/source/repos/Proyectos Compi/miniCharFinal/Logica\MiniCSharpParser.g4 by ANTLR 4.11.1
+// Generated from C:/Users/Mariana Artavia Vene/Documents/GitHub/miniCharFinal/Logica\MiniCSharpParser.g4 by ANTLR 4.11.1
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -2238,74 +2238,21 @@ public partial class MiniCSharpParser : Parser {
 	}
 
 	public partial class RelopContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode EQUALS() { return GetToken(MiniCSharpParser.EQUALS, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NOTEQUALS() { return GetToken(MiniCSharpParser.NOTEQUALS, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode GREATERTHAN() { return GetToken(MiniCSharpParser.GREATERTHAN, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode GREATOREQUALS() { return GetToken(MiniCSharpParser.GREATOREQUALS, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LESSTHAN() { return GetToken(MiniCSharpParser.LESSTHAN, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LESSOREQUALS() { return GetToken(MiniCSharpParser.LESSOREQUALS, 0); }
 		public RelopContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
 		public override int RuleIndex { get { return RULE_relop; } }
-	 
-		public RelopContext() { }
-		public virtual void CopyFrom(RelopContext context) {
-			base.CopyFrom(context);
-		}
-	}
-	public partial class GreatThanRelopASTContext : RelopContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode GREATERTHAN() { return GetToken(MiniCSharpParser.GREATERTHAN, 0); }
-		public GreatThanRelopASTContext(RelopContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IMiniCSharpParserVisitor<TResult> typedVisitor = visitor as IMiniCSharpParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitGreatThanRelopAST(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class GreatOrEqualRelopASTContext : RelopContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode GREATOREQUALS() { return GetToken(MiniCSharpParser.GREATOREQUALS, 0); }
-		public GreatOrEqualRelopASTContext(RelopContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IMiniCSharpParserVisitor<TResult> typedVisitor = visitor as IMiniCSharpParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitGreatOrEqualRelopAST(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class LessOrEqualRelopASTContext : RelopContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LESSOREQUALS() { return GetToken(MiniCSharpParser.LESSOREQUALS, 0); }
-		public LessOrEqualRelopASTContext(RelopContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IMiniCSharpParserVisitor<TResult> typedVisitor = visitor as IMiniCSharpParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitLessOrEqualRelopAST(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class NotEqualsRelopASTContext : RelopContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NOTEQUALS() { return GetToken(MiniCSharpParser.NOTEQUALS, 0); }
-		public NotEqualsRelopASTContext(RelopContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IMiniCSharpParserVisitor<TResult> typedVisitor = visitor as IMiniCSharpParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitNotEqualsRelopAST(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class LessThanRelopASTContext : RelopContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LESSTHAN() { return GetToken(MiniCSharpParser.LESSTHAN, 0); }
-		public LessThanRelopASTContext(RelopContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IMiniCSharpParserVisitor<TResult> typedVisitor = visitor as IMiniCSharpParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitLessThanRelopAST(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class EqualsRelopASTContext : RelopContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode EQUALS() { return GetToken(MiniCSharpParser.EQUALS, 0); }
-		public EqualsRelopASTContext(RelopContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IMiniCSharpParserVisitor<TResult> typedVisitor = visitor as IMiniCSharpParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitEqualsRelopAST(this);
+			if (typedVisitor != null) return typedVisitor.VisitRelop(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
@@ -2314,60 +2261,19 @@ public partial class MiniCSharpParser : Parser {
 	public RelopContext relop() {
 		RelopContext _localctx = new RelopContext(Context, State);
 		EnterRule(_localctx, 36, RULE_relop);
+		int _la;
 		try {
-			State = 326;
-			ErrorHandler.Sync(this);
-			switch (TokenStream.LA(1)) {
-			case EQUALS:
-				_localctx = new EqualsRelopASTContext(_localctx);
-				EnterOuterAlt(_localctx, 1);
-				{
-				State = 320;
-				Match(EQUALS);
-				}
-				break;
-			case NOTEQUALS:
-				_localctx = new NotEqualsRelopASTContext(_localctx);
-				EnterOuterAlt(_localctx, 2);
-				{
-				State = 321;
-				Match(NOTEQUALS);
-				}
-				break;
-			case GREATERTHAN:
-				_localctx = new GreatThanRelopASTContext(_localctx);
-				EnterOuterAlt(_localctx, 3);
-				{
-				State = 322;
-				Match(GREATERTHAN);
-				}
-				break;
-			case GREATOREQUALS:
-				_localctx = new GreatOrEqualRelopASTContext(_localctx);
-				EnterOuterAlt(_localctx, 4);
-				{
-				State = 323;
-				Match(GREATOREQUALS);
-				}
-				break;
-			case LESSTHAN:
-				_localctx = new LessThanRelopASTContext(_localctx);
-				EnterOuterAlt(_localctx, 5);
-				{
-				State = 324;
-				Match(LESSTHAN);
-				}
-				break;
-			case LESSOREQUALS:
-				_localctx = new LessOrEqualRelopASTContext(_localctx);
-				EnterOuterAlt(_localctx, 6);
-				{
-				State = 325;
-				Match(LESSOREQUALS);
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 320;
+			_la = TokenStream.LA(1);
+			if ( !(((_la) & ~0x3f) == 0 && ((1L << _la) & 138538465099776L) != 0) ) {
+			ErrorHandler.RecoverInline(this);
+			}
+			else {
+				ErrorHandler.ReportMatch(this);
+			    Consume();
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -2382,34 +2288,17 @@ public partial class MiniCSharpParser : Parser {
 	}
 
 	public partial class AddopContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode PLUS() { return GetToken(MiniCSharpParser.PLUS, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode MINUS() { return GetToken(MiniCSharpParser.MINUS, 0); }
 		public AddopContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
 		public override int RuleIndex { get { return RULE_addop; } }
-	 
-		public AddopContext() { }
-		public virtual void CopyFrom(AddopContext context) {
-			base.CopyFrom(context);
-		}
-	}
-	public partial class PlusAddopASTContext : AddopContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode PLUS() { return GetToken(MiniCSharpParser.PLUS, 0); }
-		public PlusAddopASTContext(AddopContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IMiniCSharpParserVisitor<TResult> typedVisitor = visitor as IMiniCSharpParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitPlusAddopAST(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class MinusAddopASTContext : AddopContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode MINUS() { return GetToken(MiniCSharpParser.MINUS, 0); }
-		public MinusAddopASTContext(AddopContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IMiniCSharpParserVisitor<TResult> typedVisitor = visitor as IMiniCSharpParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitMinusAddopAST(this);
+			if (typedVisitor != null) return typedVisitor.VisitAddop(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
@@ -2418,28 +2307,19 @@ public partial class MiniCSharpParser : Parser {
 	public AddopContext addop() {
 		AddopContext _localctx = new AddopContext(Context, State);
 		EnterRule(_localctx, 38, RULE_addop);
+		int _la;
 		try {
-			State = 330;
-			ErrorHandler.Sync(this);
-			switch (TokenStream.LA(1)) {
-			case PLUS:
-				_localctx = new PlusAddopASTContext(_localctx);
-				EnterOuterAlt(_localctx, 1);
-				{
-				State = 328;
-				Match(PLUS);
-				}
-				break;
-			case MINUS:
-				_localctx = new MinusAddopASTContext(_localctx);
-				EnterOuterAlt(_localctx, 2);
-				{
-				State = 329;
-				Match(MINUS);
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 322;
+			_la = TokenStream.LA(1);
+			if ( !(_la==PLUS || _la==MINUS) ) {
+			ErrorHandler.RecoverInline(this);
+			}
+			else {
+				ErrorHandler.ReportMatch(this);
+			    Consume();
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -2454,44 +2334,18 @@ public partial class MiniCSharpParser : Parser {
 	}
 
 	public partial class MulopContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode MULT() { return GetToken(MiniCSharpParser.MULT, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode DIV() { return GetToken(MiniCSharpParser.DIV, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode MOD() { return GetToken(MiniCSharpParser.MOD, 0); }
 		public MulopContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
 		public override int RuleIndex { get { return RULE_mulop; } }
-	 
-		public MulopContext() { }
-		public virtual void CopyFrom(MulopContext context) {
-			base.CopyFrom(context);
-		}
-	}
-	public partial class DivMulopASTContext : MulopContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode DIV() { return GetToken(MiniCSharpParser.DIV, 0); }
-		public DivMulopASTContext(MulopContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IMiniCSharpParserVisitor<TResult> typedVisitor = visitor as IMiniCSharpParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitDivMulopAST(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class MultMulopASTContext : MulopContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode MULT() { return GetToken(MiniCSharpParser.MULT, 0); }
-		public MultMulopASTContext(MulopContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IMiniCSharpParserVisitor<TResult> typedVisitor = visitor as IMiniCSharpParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitMultMulopAST(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class ModMulopASTContext : MulopContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode MOD() { return GetToken(MiniCSharpParser.MOD, 0); }
-		public ModMulopASTContext(MulopContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IMiniCSharpParserVisitor<TResult> typedVisitor = visitor as IMiniCSharpParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitModMulopAST(this);
+			if (typedVisitor != null) return typedVisitor.VisitMulop(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
@@ -2500,36 +2354,19 @@ public partial class MiniCSharpParser : Parser {
 	public MulopContext mulop() {
 		MulopContext _localctx = new MulopContext(Context, State);
 		EnterRule(_localctx, 40, RULE_mulop);
+		int _la;
 		try {
-			State = 335;
-			ErrorHandler.Sync(this);
-			switch (TokenStream.LA(1)) {
-			case MULT:
-				_localctx = new MultMulopASTContext(_localctx);
-				EnterOuterAlt(_localctx, 1);
-				{
-				State = 332;
-				Match(MULT);
-				}
-				break;
-			case DIV:
-				_localctx = new DivMulopASTContext(_localctx);
-				EnterOuterAlt(_localctx, 2);
-				{
-				State = 333;
-				Match(DIV);
-				}
-				break;
-			case MOD:
-				_localctx = new ModMulopASTContext(_localctx);
-				EnterOuterAlt(_localctx, 3);
-				{
-				State = 334;
-				Match(MOD);
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 324;
+			_la = TokenStream.LA(1);
+			if ( !(((_la) & ~0x3f) == 0 && ((1L << _la) & 1924145348608L) != 0) ) {
+			ErrorHandler.RecoverInline(this);
+			}
+			else {
+				ErrorHandler.ReportMatch(this);
+			    Consume();
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -2631,14 +2468,14 @@ public partial class MiniCSharpParser : Parser {
 		IdentContext _localctx = new IdentContext(Context, State);
 		EnterRule(_localctx, 42, RULE_ident);
 		try {
-			State = 344;
+			State = 333;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case INT_ID:
 				_localctx = new IntIdIdentASTContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 337;
+				State = 326;
 				Match(INT_ID);
 				}
 				break;
@@ -2646,7 +2483,7 @@ public partial class MiniCSharpParser : Parser {
 				_localctx = new CharIdIdentASTContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 338;
+				State = 327;
 				Match(CHAR_ID);
 				}
 				break;
@@ -2654,7 +2491,7 @@ public partial class MiniCSharpParser : Parser {
 				_localctx = new DoubIdIdentASTContext(_localctx);
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 339;
+				State = 328;
 				Match(DOUBLE_ID);
 				}
 				break;
@@ -2662,7 +2499,7 @@ public partial class MiniCSharpParser : Parser {
 				_localctx = new BoolIdIdentASTContext(_localctx);
 				EnterOuterAlt(_localctx, 4);
 				{
-				State = 340;
+				State = 329;
 				Match(BOOL_ID);
 				}
 				break;
@@ -2670,7 +2507,7 @@ public partial class MiniCSharpParser : Parser {
 				_localctx = new StrIdIdentASTContext(_localctx);
 				EnterOuterAlt(_localctx, 5);
 				{
-				State = 341;
+				State = 330;
 				Match(STRING_ID);
 				}
 				break;
@@ -2678,7 +2515,7 @@ public partial class MiniCSharpParser : Parser {
 				_localctx = new IdentifierIdentASTContext(_localctx);
 				EnterOuterAlt(_localctx, 6);
 				{
-				State = 342;
+				State = 331;
 				Match(IDENTIFIER);
 				}
 				break;
@@ -2686,7 +2523,7 @@ public partial class MiniCSharpParser : Parser {
 				_localctx = new ListIdentASTContext(_localctx);
 				EnterOuterAlt(_localctx, 7);
 				{
-				State = 343;
+				State = 332;
 				Match(LIST);
 				}
 				break;
@@ -2706,7 +2543,7 @@ public partial class MiniCSharpParser : Parser {
 	}
 
 	private static int[] _serializedATN = {
-		4,1,59,347,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,
+		4,1,59,336,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,
 		7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,2,14,7,14,
 		2,15,7,15,2,16,7,16,2,17,7,17,2,18,7,18,2,19,7,19,2,20,7,20,2,21,7,21,
 		1,0,5,0,46,8,0,10,0,12,0,49,9,0,1,0,1,0,1,0,1,0,1,0,1,0,5,0,57,8,0,10,
@@ -2728,101 +2565,96 @@ public partial class MiniCSharpParser : Parser {
 		277,9,14,1,15,1,15,1,15,1,15,5,15,283,8,15,10,15,12,15,286,9,15,1,16,1,
 		16,1,16,3,16,291,8,16,1,16,3,16,294,8,16,1,16,1,16,1,16,1,16,1,16,1,16,
 		1,16,1,16,1,16,1,16,1,16,3,16,307,8,16,1,17,1,17,1,17,1,17,1,17,1,17,1,
-		17,5,17,316,8,17,10,17,12,17,319,9,17,1,18,1,18,1,18,1,18,1,18,1,18,3,
-		18,327,8,18,1,19,1,19,3,19,331,8,19,1,20,1,20,1,20,3,20,336,8,20,1,21,
-		1,21,1,21,1,21,1,21,1,21,1,21,3,21,345,8,21,1,21,0,0,22,0,2,4,6,8,10,12,
-		14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,0,1,1,0,26,27,392,0,47,1,
-		0,0,0,2,64,1,0,0,0,4,68,1,0,0,0,6,79,1,0,0,0,8,92,1,0,0,0,10,102,1,0,0,
-		0,12,113,1,0,0,0,14,219,1,0,0,0,16,221,1,0,0,0,18,231,1,0,0,0,20,239,1,
-		0,0,0,22,247,1,0,0,0,24,255,1,0,0,0,26,259,1,0,0,0,28,264,1,0,0,0,30,278,
-		1,0,0,0,32,306,1,0,0,0,34,308,1,0,0,0,36,326,1,0,0,0,38,330,1,0,0,0,40,
-		335,1,0,0,0,42,344,1,0,0,0,44,46,3,2,1,0,45,44,1,0,0,0,46,49,1,0,0,0,47,
-		45,1,0,0,0,47,48,1,0,0,0,48,50,1,0,0,0,49,47,1,0,0,0,50,51,5,7,0,0,51,
-		52,3,42,21,0,52,58,5,52,0,0,53,57,3,4,2,0,54,57,3,6,3,0,55,57,3,8,4,0,
-		56,53,1,0,0,0,56,54,1,0,0,0,56,55,1,0,0,0,57,60,1,0,0,0,58,56,1,0,0,0,
-		58,59,1,0,0,0,59,61,1,0,0,0,60,58,1,0,0,0,61,62,5,53,0,0,62,63,5,0,0,1,
-		63,1,1,0,0,0,64,65,5,8,0,0,65,66,3,42,21,0,66,67,5,48,0,0,67,3,1,0,0,0,
-		68,69,3,12,6,0,69,74,3,42,21,0,70,71,5,49,0,0,71,73,3,42,21,0,72,70,1,
-		0,0,0,73,76,1,0,0,0,74,72,1,0,0,0,74,75,1,0,0,0,75,77,1,0,0,0,76,74,1,
-		0,0,0,77,78,5,48,0,0,78,5,1,0,0,0,79,80,5,7,0,0,80,81,3,42,21,0,81,85,
-		5,52,0,0,82,84,3,4,2,0,83,82,1,0,0,0,84,87,1,0,0,0,85,83,1,0,0,0,85,86,
-		1,0,0,0,86,88,1,0,0,0,87,85,1,0,0,0,88,89,5,53,0,0,89,7,1,0,0,0,90,93,
-		3,12,6,0,91,93,5,9,0,0,92,90,1,0,0,0,92,91,1,0,0,0,93,94,1,0,0,0,94,95,
-		3,42,21,0,95,97,5,50,0,0,96,98,3,10,5,0,97,96,1,0,0,0,97,98,1,0,0,0,98,
-		99,1,0,0,0,99,100,5,51,0,0,100,101,3,16,8,0,101,9,1,0,0,0,102,103,3,12,
-		6,0,103,110,3,42,21,0,104,105,5,49,0,0,105,106,3,12,6,0,106,107,3,42,21,
-		0,107,109,1,0,0,0,108,104,1,0,0,0,109,112,1,0,0,0,110,108,1,0,0,0,110,
-		111,1,0,0,0,111,11,1,0,0,0,112,110,1,0,0,0,113,116,3,42,21,0,114,115,5,
-		54,0,0,115,117,5,55,0,0,116,114,1,0,0,0,116,117,1,0,0,0,117,13,1,0,0,0,
-		118,128,3,34,17,0,119,120,5,31,0,0,120,129,3,28,14,0,121,123,5,50,0,0,
-		122,124,3,18,9,0,123,122,1,0,0,0,123,124,1,0,0,0,124,125,1,0,0,0,125,129,
-		5,51,0,0,126,129,5,36,0,0,127,129,5,37,0,0,128,119,1,0,0,0,128,121,1,0,
-		0,0,128,126,1,0,0,0,128,127,1,0,0,0,129,130,1,0,0,0,130,131,5,48,0,0,131,
-		220,1,0,0,0,132,133,5,10,0,0,133,134,5,50,0,0,134,135,3,20,10,0,135,136,
-		5,51,0,0,136,139,3,14,7,0,137,138,5,11,0,0,138,140,3,14,7,0,139,137,1,
-		0,0,0,139,140,1,0,0,0,140,220,1,0,0,0,141,142,5,13,0,0,142,143,5,50,0,
-		0,143,144,3,28,14,0,144,146,5,48,0,0,145,147,3,20,10,0,146,145,1,0,0,0,
-		146,147,1,0,0,0,147,148,1,0,0,0,148,150,5,48,0,0,149,151,3,14,7,0,150,
-		149,1,0,0,0,150,151,1,0,0,0,151,152,1,0,0,0,152,153,5,51,0,0,153,154,3,
-		14,7,0,154,220,1,0,0,0,155,156,5,12,0,0,156,157,5,50,0,0,157,158,3,20,
-		10,0,158,159,5,51,0,0,159,160,3,14,7,0,160,220,1,0,0,0,161,162,5,14,0,
-		0,162,220,5,48,0,0,163,165,5,15,0,0,164,166,3,28,14,0,165,164,1,0,0,0,
-		165,166,1,0,0,0,166,167,1,0,0,0,167,220,5,48,0,0,168,169,5,16,0,0,169,
-		170,5,50,0,0,170,171,3,34,17,0,171,172,5,51,0,0,172,173,5,48,0,0,173,220,
-		1,0,0,0,174,175,5,17,0,0,175,176,5,50,0,0,176,179,3,28,14,0,177,178,5,
-		49,0,0,178,180,7,0,0,0,179,177,1,0,0,0,179,180,1,0,0,0,180,181,1,0,0,0,
-		181,182,5,51,0,0,182,183,5,48,0,0,183,220,1,0,0,0,184,185,3,34,17,0,185,
-		186,5,20,0,0,186,189,5,50,0,0,187,190,3,34,17,0,188,190,5,26,0,0,189,187,
-		1,0,0,0,189,188,1,0,0,0,190,198,1,0,0,0,191,194,5,49,0,0,192,195,3,34,
-		17,0,193,195,5,26,0,0,194,192,1,0,0,0,194,193,1,0,0,0,195,197,1,0,0,0,
-		196,191,1,0,0,0,197,200,1,0,0,0,198,196,1,0,0,0,198,199,1,0,0,0,199,201,
-		1,0,0,0,200,198,1,0,0,0,201,202,5,51,0,0,202,203,5,48,0,0,203,220,1,0,
-		0,0,204,205,3,34,17,0,205,206,5,21,0,0,206,207,5,50,0,0,207,208,5,51,0,
-		0,208,209,5,48,0,0,209,220,1,0,0,0,210,211,3,34,17,0,211,212,5,19,0,0,
-		212,213,5,50,0,0,213,214,5,26,0,0,214,215,5,51,0,0,215,216,5,48,0,0,216,
-		220,1,0,0,0,217,220,3,16,8,0,218,220,5,48,0,0,219,118,1,0,0,0,219,132,
-		1,0,0,0,219,141,1,0,0,0,219,155,1,0,0,0,219,161,1,0,0,0,219,163,1,0,0,
-		0,219,168,1,0,0,0,219,174,1,0,0,0,219,184,1,0,0,0,219,204,1,0,0,0,219,
-		210,1,0,0,0,219,217,1,0,0,0,219,218,1,0,0,0,220,15,1,0,0,0,221,226,5,52,
-		0,0,222,225,3,4,2,0,223,225,3,14,7,0,224,222,1,0,0,0,224,223,1,0,0,0,225,
-		228,1,0,0,0,226,224,1,0,0,0,226,227,1,0,0,0,227,229,1,0,0,0,228,226,1,
-		0,0,0,229,230,5,53,0,0,230,17,1,0,0,0,231,236,3,28,14,0,232,233,5,49,0,
-		0,233,235,3,28,14,0,234,232,1,0,0,0,235,238,1,0,0,0,236,234,1,0,0,0,236,
-		237,1,0,0,0,237,19,1,0,0,0,238,236,1,0,0,0,239,244,3,22,11,0,240,241,5,
-		33,0,0,241,243,3,22,11,0,242,240,1,0,0,0,243,246,1,0,0,0,244,242,1,0,0,
-		0,244,245,1,0,0,0,245,21,1,0,0,0,246,244,1,0,0,0,247,252,3,24,12,0,248,
-		249,5,32,0,0,249,251,3,24,12,0,250,248,1,0,0,0,251,254,1,0,0,0,252,250,
-		1,0,0,0,252,253,1,0,0,0,253,23,1,0,0,0,254,252,1,0,0,0,255,256,3,28,14,
-		0,256,257,3,36,18,0,257,258,3,28,14,0,258,25,1,0,0,0,259,260,5,50,0,0,
-		260,261,3,12,6,0,261,262,5,51,0,0,262,27,1,0,0,0,263,265,5,35,0,0,264,
-		263,1,0,0,0,264,265,1,0,0,0,265,267,1,0,0,0,266,268,3,26,13,0,267,266,
-		1,0,0,0,267,268,1,0,0,0,268,269,1,0,0,0,269,275,3,30,15,0,270,271,3,38,
-		19,0,271,272,3,30,15,0,272,274,1,0,0,0,273,270,1,0,0,0,274,277,1,0,0,0,
-		275,273,1,0,0,0,275,276,1,0,0,0,276,29,1,0,0,0,277,275,1,0,0,0,278,284,
-		3,32,16,0,279,280,3,40,20,0,280,281,3,32,16,0,281,283,1,0,0,0,282,279,
-		1,0,0,0,283,286,1,0,0,0,284,282,1,0,0,0,284,285,1,0,0,0,285,31,1,0,0,0,
-		286,284,1,0,0,0,287,293,3,34,17,0,288,290,5,50,0,0,289,291,3,18,9,0,290,
-		289,1,0,0,0,290,291,1,0,0,0,291,292,1,0,0,0,292,294,5,51,0,0,293,288,1,
-		0,0,0,293,294,1,0,0,0,294,307,1,0,0,0,295,307,5,29,0,0,296,307,5,28,0,
-		0,297,307,5,26,0,0,298,307,5,27,0,0,299,307,5,25,0,0,300,301,5,18,0,0,
-		301,307,3,42,21,0,302,303,5,50,0,0,303,304,3,28,14,0,304,305,5,51,0,0,
-		305,307,1,0,0,0,306,287,1,0,0,0,306,295,1,0,0,0,306,296,1,0,0,0,306,297,
-		1,0,0,0,306,298,1,0,0,0,306,299,1,0,0,0,306,300,1,0,0,0,306,302,1,0,0,
-		0,307,33,1,0,0,0,308,317,3,42,21,0,309,310,5,47,0,0,310,316,3,42,21,0,
-		311,312,5,54,0,0,312,313,3,28,14,0,313,314,5,55,0,0,314,316,1,0,0,0,315,
-		309,1,0,0,0,315,311,1,0,0,0,316,319,1,0,0,0,317,315,1,0,0,0,317,318,1,
-		0,0,0,318,35,1,0,0,0,319,317,1,0,0,0,320,327,5,41,0,0,321,327,5,42,0,0,
-		322,327,5,44,0,0,323,327,5,46,0,0,324,327,5,43,0,0,325,327,5,45,0,0,326,
-		320,1,0,0,0,326,321,1,0,0,0,326,322,1,0,0,0,326,323,1,0,0,0,326,324,1,
-		0,0,0,326,325,1,0,0,0,327,37,1,0,0,0,328,331,5,34,0,0,329,331,5,35,0,0,
-		330,328,1,0,0,0,330,329,1,0,0,0,331,39,1,0,0,0,332,336,5,38,0,0,333,336,
-		5,39,0,0,334,336,5,40,0,0,335,332,1,0,0,0,335,333,1,0,0,0,335,334,1,0,
-		0,0,336,41,1,0,0,0,337,345,5,2,0,0,338,345,5,4,0,0,339,345,5,6,0,0,340,
-		345,5,5,0,0,341,345,5,3,0,0,342,345,5,56,0,0,343,345,5,1,0,0,344,337,1,
-		0,0,0,344,338,1,0,0,0,344,339,1,0,0,0,344,340,1,0,0,0,344,341,1,0,0,0,
-		344,342,1,0,0,0,344,343,1,0,0,0,345,43,1,0,0,0,38,47,56,58,74,85,92,97,
+		17,5,17,316,8,17,10,17,12,17,319,9,17,1,18,1,18,1,19,1,19,1,20,1,20,1,
+		21,1,21,1,21,1,21,1,21,1,21,1,21,3,21,334,8,21,1,21,0,0,22,0,2,4,6,8,10,
+		12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,0,4,1,0,26,27,1,0,41,46,
+		1,0,34,35,1,0,38,40,373,0,47,1,0,0,0,2,64,1,0,0,0,4,68,1,0,0,0,6,79,1,
+		0,0,0,8,92,1,0,0,0,10,102,1,0,0,0,12,113,1,0,0,0,14,219,1,0,0,0,16,221,
+		1,0,0,0,18,231,1,0,0,0,20,239,1,0,0,0,22,247,1,0,0,0,24,255,1,0,0,0,26,
+		259,1,0,0,0,28,264,1,0,0,0,30,278,1,0,0,0,32,306,1,0,0,0,34,308,1,0,0,
+		0,36,320,1,0,0,0,38,322,1,0,0,0,40,324,1,0,0,0,42,333,1,0,0,0,44,46,3,
+		2,1,0,45,44,1,0,0,0,46,49,1,0,0,0,47,45,1,0,0,0,47,48,1,0,0,0,48,50,1,
+		0,0,0,49,47,1,0,0,0,50,51,5,7,0,0,51,52,3,42,21,0,52,58,5,52,0,0,53,57,
+		3,4,2,0,54,57,3,6,3,0,55,57,3,8,4,0,56,53,1,0,0,0,56,54,1,0,0,0,56,55,
+		1,0,0,0,57,60,1,0,0,0,58,56,1,0,0,0,58,59,1,0,0,0,59,61,1,0,0,0,60,58,
+		1,0,0,0,61,62,5,53,0,0,62,63,5,0,0,1,63,1,1,0,0,0,64,65,5,8,0,0,65,66,
+		3,42,21,0,66,67,5,48,0,0,67,3,1,0,0,0,68,69,3,12,6,0,69,74,3,42,21,0,70,
+		71,5,49,0,0,71,73,3,42,21,0,72,70,1,0,0,0,73,76,1,0,0,0,74,72,1,0,0,0,
+		74,75,1,0,0,0,75,77,1,0,0,0,76,74,1,0,0,0,77,78,5,48,0,0,78,5,1,0,0,0,
+		79,80,5,7,0,0,80,81,3,42,21,0,81,85,5,52,0,0,82,84,3,4,2,0,83,82,1,0,0,
+		0,84,87,1,0,0,0,85,83,1,0,0,0,85,86,1,0,0,0,86,88,1,0,0,0,87,85,1,0,0,
+		0,88,89,5,53,0,0,89,7,1,0,0,0,90,93,3,12,6,0,91,93,5,9,0,0,92,90,1,0,0,
+		0,92,91,1,0,0,0,93,94,1,0,0,0,94,95,3,42,21,0,95,97,5,50,0,0,96,98,3,10,
+		5,0,97,96,1,0,0,0,97,98,1,0,0,0,98,99,1,0,0,0,99,100,5,51,0,0,100,101,
+		3,16,8,0,101,9,1,0,0,0,102,103,3,12,6,0,103,110,3,42,21,0,104,105,5,49,
+		0,0,105,106,3,12,6,0,106,107,3,42,21,0,107,109,1,0,0,0,108,104,1,0,0,0,
+		109,112,1,0,0,0,110,108,1,0,0,0,110,111,1,0,0,0,111,11,1,0,0,0,112,110,
+		1,0,0,0,113,116,3,42,21,0,114,115,5,54,0,0,115,117,5,55,0,0,116,114,1,
+		0,0,0,116,117,1,0,0,0,117,13,1,0,0,0,118,128,3,34,17,0,119,120,5,31,0,
+		0,120,129,3,28,14,0,121,123,5,50,0,0,122,124,3,18,9,0,123,122,1,0,0,0,
+		123,124,1,0,0,0,124,125,1,0,0,0,125,129,5,51,0,0,126,129,5,36,0,0,127,
+		129,5,37,0,0,128,119,1,0,0,0,128,121,1,0,0,0,128,126,1,0,0,0,128,127,1,
+		0,0,0,129,130,1,0,0,0,130,131,5,48,0,0,131,220,1,0,0,0,132,133,5,10,0,
+		0,133,134,5,50,0,0,134,135,3,20,10,0,135,136,5,51,0,0,136,139,3,14,7,0,
+		137,138,5,11,0,0,138,140,3,14,7,0,139,137,1,0,0,0,139,140,1,0,0,0,140,
+		220,1,0,0,0,141,142,5,13,0,0,142,143,5,50,0,0,143,144,3,28,14,0,144,146,
+		5,48,0,0,145,147,3,20,10,0,146,145,1,0,0,0,146,147,1,0,0,0,147,148,1,0,
+		0,0,148,150,5,48,0,0,149,151,3,14,7,0,150,149,1,0,0,0,150,151,1,0,0,0,
+		151,152,1,0,0,0,152,153,5,51,0,0,153,154,3,14,7,0,154,220,1,0,0,0,155,
+		156,5,12,0,0,156,157,5,50,0,0,157,158,3,20,10,0,158,159,5,51,0,0,159,160,
+		3,14,7,0,160,220,1,0,0,0,161,162,5,14,0,0,162,220,5,48,0,0,163,165,5,15,
+		0,0,164,166,3,28,14,0,165,164,1,0,0,0,165,166,1,0,0,0,166,167,1,0,0,0,
+		167,220,5,48,0,0,168,169,5,16,0,0,169,170,5,50,0,0,170,171,3,34,17,0,171,
+		172,5,51,0,0,172,173,5,48,0,0,173,220,1,0,0,0,174,175,5,17,0,0,175,176,
+		5,50,0,0,176,179,3,28,14,0,177,178,5,49,0,0,178,180,7,0,0,0,179,177,1,
+		0,0,0,179,180,1,0,0,0,180,181,1,0,0,0,181,182,5,51,0,0,182,183,5,48,0,
+		0,183,220,1,0,0,0,184,185,3,34,17,0,185,186,5,20,0,0,186,189,5,50,0,0,
+		187,190,3,34,17,0,188,190,5,26,0,0,189,187,1,0,0,0,189,188,1,0,0,0,190,
+		198,1,0,0,0,191,194,5,49,0,0,192,195,3,34,17,0,193,195,5,26,0,0,194,192,
+		1,0,0,0,194,193,1,0,0,0,195,197,1,0,0,0,196,191,1,0,0,0,197,200,1,0,0,
+		0,198,196,1,0,0,0,198,199,1,0,0,0,199,201,1,0,0,0,200,198,1,0,0,0,201,
+		202,5,51,0,0,202,203,5,48,0,0,203,220,1,0,0,0,204,205,3,34,17,0,205,206,
+		5,21,0,0,206,207,5,50,0,0,207,208,5,51,0,0,208,209,5,48,0,0,209,220,1,
+		0,0,0,210,211,3,34,17,0,211,212,5,19,0,0,212,213,5,50,0,0,213,214,5,26,
+		0,0,214,215,5,51,0,0,215,216,5,48,0,0,216,220,1,0,0,0,217,220,3,16,8,0,
+		218,220,5,48,0,0,219,118,1,0,0,0,219,132,1,0,0,0,219,141,1,0,0,0,219,155,
+		1,0,0,0,219,161,1,0,0,0,219,163,1,0,0,0,219,168,1,0,0,0,219,174,1,0,0,
+		0,219,184,1,0,0,0,219,204,1,0,0,0,219,210,1,0,0,0,219,217,1,0,0,0,219,
+		218,1,0,0,0,220,15,1,0,0,0,221,226,5,52,0,0,222,225,3,4,2,0,223,225,3,
+		14,7,0,224,222,1,0,0,0,224,223,1,0,0,0,225,228,1,0,0,0,226,224,1,0,0,0,
+		226,227,1,0,0,0,227,229,1,0,0,0,228,226,1,0,0,0,229,230,5,53,0,0,230,17,
+		1,0,0,0,231,236,3,28,14,0,232,233,5,49,0,0,233,235,3,28,14,0,234,232,1,
+		0,0,0,235,238,1,0,0,0,236,234,1,0,0,0,236,237,1,0,0,0,237,19,1,0,0,0,238,
+		236,1,0,0,0,239,244,3,22,11,0,240,241,5,33,0,0,241,243,3,22,11,0,242,240,
+		1,0,0,0,243,246,1,0,0,0,244,242,1,0,0,0,244,245,1,0,0,0,245,21,1,0,0,0,
+		246,244,1,0,0,0,247,252,3,24,12,0,248,249,5,32,0,0,249,251,3,24,12,0,250,
+		248,1,0,0,0,251,254,1,0,0,0,252,250,1,0,0,0,252,253,1,0,0,0,253,23,1,0,
+		0,0,254,252,1,0,0,0,255,256,3,28,14,0,256,257,3,36,18,0,257,258,3,28,14,
+		0,258,25,1,0,0,0,259,260,5,50,0,0,260,261,3,12,6,0,261,262,5,51,0,0,262,
+		27,1,0,0,0,263,265,5,35,0,0,264,263,1,0,0,0,264,265,1,0,0,0,265,267,1,
+		0,0,0,266,268,3,26,13,0,267,266,1,0,0,0,267,268,1,0,0,0,268,269,1,0,0,
+		0,269,275,3,30,15,0,270,271,3,38,19,0,271,272,3,30,15,0,272,274,1,0,0,
+		0,273,270,1,0,0,0,274,277,1,0,0,0,275,273,1,0,0,0,275,276,1,0,0,0,276,
+		29,1,0,0,0,277,275,1,0,0,0,278,284,3,32,16,0,279,280,3,40,20,0,280,281,
+		3,32,16,0,281,283,1,0,0,0,282,279,1,0,0,0,283,286,1,0,0,0,284,282,1,0,
+		0,0,284,285,1,0,0,0,285,31,1,0,0,0,286,284,1,0,0,0,287,293,3,34,17,0,288,
+		290,5,50,0,0,289,291,3,18,9,0,290,289,1,0,0,0,290,291,1,0,0,0,291,292,
+		1,0,0,0,292,294,5,51,0,0,293,288,1,0,0,0,293,294,1,0,0,0,294,307,1,0,0,
+		0,295,307,5,29,0,0,296,307,5,28,0,0,297,307,5,26,0,0,298,307,5,27,0,0,
+		299,307,5,25,0,0,300,301,5,18,0,0,301,307,3,42,21,0,302,303,5,50,0,0,303,
+		304,3,28,14,0,304,305,5,51,0,0,305,307,1,0,0,0,306,287,1,0,0,0,306,295,
+		1,0,0,0,306,296,1,0,0,0,306,297,1,0,0,0,306,298,1,0,0,0,306,299,1,0,0,
+		0,306,300,1,0,0,0,306,302,1,0,0,0,307,33,1,0,0,0,308,317,3,42,21,0,309,
+		310,5,47,0,0,310,316,3,42,21,0,311,312,5,54,0,0,312,313,3,28,14,0,313,
+		314,5,55,0,0,314,316,1,0,0,0,315,309,1,0,0,0,315,311,1,0,0,0,316,319,1,
+		0,0,0,317,315,1,0,0,0,317,318,1,0,0,0,318,35,1,0,0,0,319,317,1,0,0,0,320,
+		321,7,1,0,0,321,37,1,0,0,0,322,323,7,2,0,0,323,39,1,0,0,0,324,325,7,3,
+		0,0,325,41,1,0,0,0,326,334,5,2,0,0,327,334,5,4,0,0,328,334,5,6,0,0,329,
+		334,5,5,0,0,330,334,5,3,0,0,331,334,5,56,0,0,332,334,5,1,0,0,333,326,1,
+		0,0,0,333,327,1,0,0,0,333,328,1,0,0,0,333,329,1,0,0,0,333,330,1,0,0,0,
+		333,331,1,0,0,0,333,332,1,0,0,0,334,43,1,0,0,0,35,47,56,58,74,85,92,97,
 		110,116,123,128,139,146,150,165,179,189,194,198,219,224,226,236,244,252,
-		264,267,275,284,290,293,306,315,317,326,330,335,344
+		264,267,275,284,290,293,306,315,317,333
 	};
 
 	public static readonly ATN _ATN =

@@ -6,7 +6,7 @@
         <PerGrammarGenerationSettings>
           <option name="fileName" value="$PROJECT_DIR$/Logica/MiniCSharpScanner.g4" />
           <option name="autoGen" value="true" />
-          <option name="outputDir" value="C:\Users\franj\source\repos\Proyectos Compi\miniCharFinal\Logica" />
+          <option name="outputDir" value="C:\Users\Mariana Artavia Vene\Documents\GitHub\miniCharFinal\Logica" />
           <option name="libDir" value="" />
           <option name="encoding" value="" />
           <option name="pkg" value="" />
@@ -17,7 +17,7 @@
         <PerGrammarGenerationSettings>
           <option name="fileName" value="$PROJECT_DIR$/Logica/MiniCSharpParser.g4" />
           <option name="autoGen" value="true" />
-          <option name="outputDir" value="C:\Users\franj\source\repos\Proyectos Compi\miniCharFinal\Logica" />
+          <option name="outputDir" value="C:\Users\Mariana Artavia Vene\Documents\GitHub\miniCharFinal\Logica" />
           <option name="libDir" value="" />
           <option name="encoding" value="" />
           <option name="pkg" value="" />

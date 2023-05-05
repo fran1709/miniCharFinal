@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from C:/Users/franj/source/repos/Proyectos Compi/miniCharFinal/Logica\MiniCSharpParser.g4 by ANTLR 4.11.1
+// Generated from C:/Users/Mariana Artavia Vene/Documents/GitHub/miniCharFinal/Logica\MiniCSharpParser.g4 by ANTLR 4.11.1
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -291,82 +291,23 @@ public interface IMiniCSharpParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitDesignatorAST([NotNull] MiniCSharpParser.DesignatorASTContext context);
 	/// <summary>
-	/// Visit a parse tree produced by the <c>equalsRelopAST</c>
-	/// labeled alternative in <see cref="MiniCSharpParser.relop"/>.
+	/// Visit a parse tree produced by <see cref="MiniCSharpParser.relop"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitEqualsRelopAST([NotNull] MiniCSharpParser.EqualsRelopASTContext context);
+	Result VisitRelop([NotNull] MiniCSharpParser.RelopContext context);
 	/// <summary>
-	/// Visit a parse tree produced by the <c>notEqualsRelopAST</c>
-	/// labeled alternative in <see cref="MiniCSharpParser.relop"/>.
+	/// Visit a parse tree produced by <see cref="MiniCSharpParser.addop"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitNotEqualsRelopAST([NotNull] MiniCSharpParser.NotEqualsRelopASTContext context);
+	Result VisitAddop([NotNull] MiniCSharpParser.AddopContext context);
 	/// <summary>
-	/// Visit a parse tree produced by the <c>greatThanRelopAST</c>
-	/// labeled alternative in <see cref="MiniCSharpParser.relop"/>.
+	/// Visit a parse tree produced by <see cref="MiniCSharpParser.mulop"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitGreatThanRelopAST([NotNull] MiniCSharpParser.GreatThanRelopASTContext context);
-	/// <summary>
-	/// Visit a parse tree produced by the <c>greatOrEqualRelopAST</c>
-	/// labeled alternative in <see cref="MiniCSharpParser.relop"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitGreatOrEqualRelopAST([NotNull] MiniCSharpParser.GreatOrEqualRelopASTContext context);
-	/// <summary>
-	/// Visit a parse tree produced by the <c>lessThanRelopAST</c>
-	/// labeled alternative in <see cref="MiniCSharpParser.relop"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitLessThanRelopAST([NotNull] MiniCSharpParser.LessThanRelopASTContext context);
-	/// <summary>
-	/// Visit a parse tree produced by the <c>lessOrEqualRelopAST</c>
-	/// labeled alternative in <see cref="MiniCSharpParser.relop"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitLessOrEqualRelopAST([NotNull] MiniCSharpParser.LessOrEqualRelopASTContext context);
-	/// <summary>
-	/// Visit a parse tree produced by the <c>plusAddopAST</c>
-	/// labeled alternative in <see cref="MiniCSharpParser.addop"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitPlusAddopAST([NotNull] MiniCSharpParser.PlusAddopASTContext context);
-	/// <summary>
-	/// Visit a parse tree produced by the <c>minusAddopAST</c>
-	/// labeled alternative in <see cref="MiniCSharpParser.addop"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitMinusAddopAST([NotNull] MiniCSharpParser.MinusAddopASTContext context);
-	/// <summary>
-	/// Visit a parse tree produced by the <c>multMulopAST</c>
-	/// labeled alternative in <see cref="MiniCSharpParser.mulop"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitMultMulopAST([NotNull] MiniCSharpParser.MultMulopASTContext context);
-	/// <summary>
-	/// Visit a parse tree produced by the <c>divMulopAST</c>
-	/// labeled alternative in <see cref="MiniCSharpParser.mulop"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitDivMulopAST([NotNull] MiniCSharpParser.DivMulopASTContext context);
-	/// <summary>
-	/// Visit a parse tree produced by the <c>modMulopAST</c>
-	/// labeled alternative in <see cref="MiniCSharpParser.mulop"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitModMulopAST([NotNull] MiniCSharpParser.ModMulopASTContext context);
+	Result VisitMulop([NotNull] MiniCSharpParser.MulopContext context);
 	/// <summary>
 	/// Visit a parse tree produced by the <c>intIdIdentAST</c>
 	/// labeled alternative in <see cref="MiniCSharpParser.ident"/>.
