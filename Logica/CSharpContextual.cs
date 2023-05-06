@@ -98,7 +98,6 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
                 else
                 {
                     laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de tipos: Tipo: \"" + context.type().GetText() + "\" no es un tipo válido." + showErrorPosition(context.type().Start) + "\n";
-
                 }
 
             }
@@ -459,36 +458,35 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
     // factor : CHARCONST
     public override object VisitCharconstFactorAST(MiniCSharpParser.CharconstFactorASTContext context)
     {
-        // nothing to visit
-        return 3; // 3 es char
+        return TipoBasico.TiposBasicos.Char; 
     }
 
     // factor : STRINGCONST
     public override object VisitStrconstFactorAST(MiniCSharpParser.StrconstFactorASTContext context)
     {
         // nothing to visit
-        return 4; // 4 es string
+        return TipoBasico.TiposBasicos.String; 
     }
 
     // factor : INT 
     public override object VisitIntFactorAST(MiniCSharpParser.IntFactorASTContext context)
     {
         // nothing to visit
-        return 1; // int es 1
+        return TipoBasico.TiposBasicos.Int; 
     }
 
     // factor : DOUBLE
     public override object VisitDoubFactorAST(MiniCSharpParser.DoubFactorASTContext context)
     {
         // nothing to visit
-        return 2; // 2 es double
+        return TipoBasico.TiposBasicos.Double;
     }
 
     // factor : BOOL
     public override object VisitBoolFactorAST(MiniCSharpParser.BoolFactorASTContext context)
     {
         // nothing to visit
-        return 5; // 5  es bool
+        return TipoBasico.TiposBasicos.Boolean; 
     }
 
     // factor : NEW ident

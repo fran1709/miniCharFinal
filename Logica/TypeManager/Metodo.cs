@@ -1,6 +1,10 @@
-﻿namespace miniChart.Logica.TypeManager;
+﻿using Antlr4.Runtime;
 
-public class Metodo
+namespace miniChart.Logica.TypeManager;
+
+public class Metodo : Tipo
 {
-    
+    public Metodo(IToken tok) : base(tok)
+    {
+    }
 }

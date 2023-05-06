@@ -10,16 +10,7 @@ public class CSTablaSimbolos
 {
     static LinkedList<Object> tabla;
     public int nivelActual;
-    public Consola consola; 
-
-    public class Ident
-    {
-        internal IToken tok;
-        internal int type;
-        public static int nivel;
-        int valor;
-        internal int dataType;
-    }
+    public Consola consola;
 
     public CSTablaSimbolos()
     {
@@ -33,20 +24,7 @@ public class CSTablaSimbolos
         ident.nivel = nivelActual;
         tabla.AddLast(ident);
     }
-    
-    public Tipo buscar(String nombre)
-    {
-        foreach (object id in tabla)
-        {
-            Tipo ident = id as Tipo;
-            if (ident.tok.Text.Equals(nombre))
-            {
-                return ident;
-            }
-        }
-        return null;
-    }
-    
+
     public Clase buscarClase(string nombre)
     {
         foreach (object id in tabla)

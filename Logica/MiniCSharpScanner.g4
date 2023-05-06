@@ -84,5 +84,4 @@ IDENTIFIER      : LETTER (LETTER | DIGIT)*;
 //Skip
 COMMENT         : '//' ~[\r\n]* -> skip;
 BLOCKCOMMENT    : '/*' ~[\r\n]* '*/'-> skip;
-//NESTEDCOMMENT : '/*' (COMMENT | ~[*/])* '*/' -> skip;
 WS              : [ \t\n\r]+ -> skip;
