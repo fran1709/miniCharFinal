@@ -15,7 +15,7 @@ public class TipoClase : Tipo
     
     public static bool IsTipoClase(string ident)
     {
-        return Clase.isClase(ident);
+        return Clase.IsClase(ident);
     }
     
     public override string ToString()

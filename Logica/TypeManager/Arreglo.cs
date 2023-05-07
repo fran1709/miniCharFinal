@@ -34,8 +34,8 @@ public class Arreglo : Tipo
     {
         switch (tipoDato)
         {
-            case (int)TiposArreglo.Int: return TiposArreglo.Int.ToString().ToLower() + "[]";
-            case (int)TiposArreglo.Char: return TiposArreglo.Char.ToString().ToLower() + "[]";;
+            case (int)TiposArreglo.Int: return TiposArreglo.Int.ToString().ToLower();
+            case (int)TiposArreglo.Char: return TiposArreglo.Char.ToString().ToLower();
             default: return TiposArreglo.Error.ToString();
         }
     }

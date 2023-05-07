@@ -13,9 +13,9 @@ public class Clase : Tipo
         tipoDato = "null";
     }
     
-    public static bool isClase(string nombre)
+    public static bool IsClase(string nombre)
     {
-        return !string.IsNullOrEmpty(nombre) && nombre.All(c => char.IsLetterOrDigit(c));
+        return !TipoBasico.isTipoBasico(nombre) && !string.IsNullOrEmpty(nombre) && nombre.All(c => char.IsLetterOrDigit(c));
     }
     
     public override string ToString()
