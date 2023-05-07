@@ -1,5 +1,6 @@
 ﻿using System;
 using Antlr4.Runtime;
+using Antlr4.Runtime.Misc;
 using miniChart.Logica.TypeManager;
 
 namespace miniChart.Logica;
@@ -90,6 +91,9 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
             if (TipoClase.IsTipoClase(context.type().GetText()))
             {
                 Clase claseBuscada = this.laCsTablaSimbolos.buscarClase(context.type().GetText());
+                // BUSQUEDA MEDIANTE TIPOS GENERICA ?
+                Clase searched = this.laCsTablaSimbolos.buscarObjetoTipo<Clase>(context.type().GetText());
+
                 if (claseBuscada != null)
                 {
                     TipoClase tipoClase = new TipoClase(id, context.type().GetText());
@@ -222,25 +226,56 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
     // statement : IF LEFTPAREN condition RIGHTPAREN statement (ELSE statement)?  
     public override object VisitIfStatementAST(MiniCSharpParser.IfStatementASTContext context)
     {
+        var tipoCondicion = (Tipo)Visit(context.condition());
+        if (tipoCondicion == null)
+        {
+            // La expresión es nula, se reporta el error
+            laCsTablaSimbolos.consola.SalidaConsola.Text += "Error: La condición del if es nula."+ showErrorPosition(context.condition().Start)  +"\n";
+            return null;
+        }
+        if (!tipoCondicion.GetType().Equals(typeof(bool)))
+        {
+            // La expresión no es de tipo booleano, se reporta el error
+            laCsTablaSimbolos.consola.SalidaConsola.Text += string.Format("Error: La condición debe ser de tipo bool, pero es de tipo {0}.\n", tipoCondicion.GetType().Name);
+            return null;
+        }
         Visit(context.condition());
         Visit(context.statement(0));
         if (context.statement().Length > 1)
         {
             Visit(context.statement(1));
         }
-        return null;
+        // La condición es de tipo booleano, se devuelve el tipo
+        return tipoCondicion;
     }
 
     // statement : FOR LEFTPAREN expr SEMICOLON condition? SEMICOLON statement? RIGHTPAREN statement
     public override object VisitForStatementAST(MiniCSharpParser.ForStatementASTContext context)
     {
-        Visit(context.expr());
-        if (context.condition() != null)
+        var tipoExpr = (Tipo)Visit(context.expr());
+
+        // Verificar que el tipo del expr sea numérico
+        if (tipoExpr == null || !(tipoExpr is int))
         {
-            Visit(context.condition());
+            laCsTablaSimbolos.consola.SalidaConsola.Text += "Error: La expresión del for debe ser de tipo numérico.\n";
+            return null;
         }
 
-        if (context.statement()!= null)
+        // Si la condition existe, visita su subárbol y obtiene su tipo
+        if (context.condition() != null)
+        {
+            var tipoCondicion = (Tipo)Visit(context.condition());
+
+            // Verificar que el tipo de la condition sea bool
+            if (tipoCondicion == null || !(tipoCondicion is bool))
+            {
+                laCsTablaSimbolos.consola.SalidaConsola.Text += "Error: La condición del for debe ser de tipo bool.\n";
+                return null;
+            }
+        }
+
+        // Si statement existe, visita su subárbol y obtiene su tipo
+        if (context.statement() != null)
         {
             Visit(context.statement(0));
         }
@@ -249,16 +284,27 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
         {
             Visit(context.statement(1));
         }
+
         return null;
     }
+
 
     // statement : WHILE LEFTPAREN condition RIGHTPAREN statement
     public override object VisitWhileConditionStatementAST(MiniCSharpParser.WhileConditionStatementASTContext context)
     {
-        Visit(context.condition());
+        var tipoCondicion = (Tipo)Visit(context.condition());
+    
+        // Verifica que el tipo de la condición sea bool
+        if (tipoCondicion == null || !(tipoCondicion is bool))
+        {
+            laCsTablaSimbolos.consola.SalidaConsola.Text += "Error: La condición del while debe ser de tipo bool.\n";
+            return null;
+        }
+    
         Visit(context.statement());
         return null;
     }
+
 
     // statement : BREAK SEMICOLON  
     public override object VisitBreakStatementAST(MiniCSharpParser.BreakStatementASTContext context)
@@ -268,6 +314,7 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
     }
 
     // statement : RETURN expr? SEMICOLON
+    // modificar a futuro con implementacion de los metodos
     public override object VisitReturnStatementAST(MiniCSharpParser.ReturnStatementASTContext context)
     {
         if (context.expr() != null)
@@ -287,9 +334,35 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
     // statement : WRITE LEFTPAREN expr (COMMA (INT | DOUBLE))? RIGHTPAREN SEMICOLON
     public override object VisitWriteNumberStatementAST(MiniCSharpParser.WriteNumberStatementASTContext context)
     {
-        Visit(context.expr());
-        return null;    
+        object exprType = Visit(context.expr());
+        bool isIntOrDouble = exprType is int || exprType is double;
+
+        if (!isIntOrDouble)
+        {
+            IToken token = context.expr().Start;
+            ReportError($"Se esperaba una expresión de tipo int o double en la instrucción 'write', se encontró '{exprType}'", token);
+        }
+
+        if (context.INT() != null)
+        {
+            if (!(exprType is int))
+            {
+                IToken token = context.INT().Symbol;
+                ReportError($"Se esperaba una expresión de tipo int después de la ',' en la instrucción 'write', se encontró '{exprType}'", token);
+            }
+        }
+        else if (context.DOUBLE() != null)
+        {
+            if (!(exprType is double))
+            {
+                IToken token = context.DOUBLE().Symbol;
+                ReportError($"Se esperaba una expresión de tipo double después de la ',' en la instrucción 'write', se encontró '{exprType}'", token);
+            }
+        }
+
+        return null;
     }
+
 
     // statement : designator ADDMETHOD LEFTPAREN (designator | INT) (COMMA (designator | INT))* RIGHTPAREN SEMICOLON
     public override object VisitDesignAddMethStatementAST(MiniCSharpParser.DesignAddMethStatementASTContext context)
@@ -329,7 +402,9 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
     // statement : block
     public override object VisitBlockStatementAST(MiniCSharpParser.BlockStatementASTContext context)
     {
+        laCsTablaSimbolos.openScope();
         Visit(context.block());
+        laCsTablaSimbolos.CloseScope();
         return null;
     }
 
@@ -358,8 +433,10 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
     }
 
     // actPars : expr (COMMA expr)*
+    // duda con la verificacion de tipos de los parametros de los metodos
     public override object VisitActParsAST(MiniCSharpParser.ActParsASTContext context)
     {
+        int result = -1;
         Visit(context.expr(0));
         if (context.expr().Length > 1)
         {
@@ -368,83 +445,148 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
                 Visit(context.expr(i));
             }
         }
-        return null;
+        return result;
     }
 
     // condition : condTerm (OR condTerm)* 
     public override object VisitConditionAST(MiniCSharpParser.ConditionASTContext context)
     {
-        Visit(context.condTerm(0));
-        if (context.condTerm().Length > 1)
+        // Obtiene el tipo de la primera expresión
+        int firstType = (int) Visit(context.condTerm(0));
+    
+        // Verifica que todas las expresiones tengan el mismo tipo
+        for (int i = 1; i < context.condTerm().Length; i++)
         {
-            for (int i = 1; i < context.condTerm().Length; i++)
+            int currentType = (int) Visit(context.condTerm(i));
+        
+            if (firstType != currentType)
             {
-                Visit(context.condTerm(i));
+                // Si los tipos no son iguales en las expresiones, entonces hay un error de tipo en la condición
+                laCsTablaSimbolos.consola.SalidaConsola.Text += string.Format("Error: La condición deben ser iguales en tipo. {0}.\n", "Primera Condicion: ",firstType, ", Segunda Condición: ",currentType);
             }
         }
+    
         return null;
     }
 
-    // condTerm : condFact (AND condFact)* 
+    // condTerm : condFact (AND condFact)*
     public override object VisitCondTermAST(MiniCSharpParser.CondTermASTContext context)
     {
-        Visit(context.condFact(0));
-        if (context.condFact().Length > 1)
+        // Obtiene el tipo de la primera expresión
+        int firstType = (int) Visit(context.condFact(0));
+    
+        // Verifica que todas las expresiones tengan el mismo tipo
+        for (int i = 1; i < context.condFact().Length; i++)
         {
-            for (int i = 1; i < context.condFact().Length; i++)
+            int currentType = (int) Visit(context.condFact(i));
+        
+            if (firstType != currentType)
             {
-                Visit(context.condFact(i));
+                // Si los tipos no son iguales, entonces hay un error de tipo en la condición
+                laCsTablaSimbolos.consola.SalidaConsola.Text += string.Format("Error: La condición deben ser iguales en tipo. {0}.\n", "Primera Condicion: ",firstType, ", Segunda Condición: ",currentType);
             }
         }
-        return null;
+    
+        return firstType;
     }
 
-    // condFact : expr relop expr 
+    // condFact : expr (RELOP | EQOP) expr
     public override object VisitCondFactAST(MiniCSharpParser.CondFactASTContext context)
     {
-        Visit(context.expr(0));
-        Visit(context.relop());
-        Visit(context.expr(1));
-        return null;
+        // Obtiene el tipo de la primera expresión
+        var firstType = (int) Visit(context.expr(0));
+    
+        // Obtiene el tipo de la segunda expresión
+        int secondType = (int) Visit(context.expr(1));
+    
+        // Verifica que las expresiones tengan el mismo tipo
+        if (firstType != secondType)
+        {
+            // Si los tipos no son iguales, entonces hay un error de tipo en la condición
+            laCsTablaSimbolos.consola.SalidaConsola.Text += string.Format("Error: La condición deben ser iguales en tipo. {0}.\n", "Primera Condicion: ",firstType, ", Segunda Condición: ",secondType);
+        }
+    
+        // Retorna el tipo de la primera expresión, que es el tipo de la expresión condicional
+        return firstType;
     }
 
     // cast : LEFTPAREN type RIGHTPAREN  
+    // falta verificacion de tipos
     public override object VisitCastAST(MiniCSharpParser.CastASTContext context)
     {
-        Visit(context.type());
+        int type = (int) Visit(context.type());
+        //falta verificar
         return null;
     }
 
     // expr : MINUS? cast? term (addop term)* 
     public override object VisitExprAST(MiniCSharpParser.ExprASTContext context)
     {
+        TipoBasico.TiposBasicos tipo;
+    
+        if (context.MINUS() != null)
+        {
+            tipo = (TipoBasico.TiposBasicos)Visit(context.term(0));
+            if (tipo != TipoBasico.TiposBasicos.Int && tipo != TipoBasico.TiposBasicos.Double)
+            {
+                laCsTablaSimbolos.consola.SalidaConsola.Text += "Operador unario '-' solo puede ser aplicado a operandos de tipo int o double.";
+            }
+        }
+    
         if (context.cast() != null)
         {
-            Visit(context.cast());
+            tipo = (TipoBasico.TiposBasicos)Visit(context.cast());
         }
-        Visit(context.term(0));
-        
+        else
+        {
+            tipo = (TipoBasico.TiposBasicos)Visit(context.term(0));
+        }
+    
         for (int i = 1; i < context.term().Length; i++)
         {
-            Visit(context.addop(i - 1));
-            Visit(context.term(i));
+            TipoBasico.TiposBasicos termTipo = (TipoBasico.TiposBasicos)Visit(context.term(i));
+            if (tipo != termTipo)
+            {
+                laCsTablaSimbolos.consola.SalidaConsola.Text += "Tipos incompatibles en expresión aritmética.";
+            }
+            tipo = (TipoBasico.TiposBasicos)Visit(context.addop(i - 1));
         }
-        return null;
+        return tipo;
     }
+
 
     // term : factor (mulop factor)* 
+    // Verificar tipos
     public override object VisitTermAST(MiniCSharpParser.TermASTContext context)
     {
-        Visit(context.factor(0));
+        TipoBasico.TiposBasicos tipoAnterior = (TipoBasico.TiposBasicos)Visit(context.factor(0));
         for (int i = 1; i < context.factor().Length; i++)
         {
+            TipoBasico.TiposBasicos tipoActual = (TipoBasico.TiposBasicos)Visit(context.factor(i));
+            if (tipoAnterior != TipoBasico.TiposBasicos.Int && tipoAnterior != TipoBasico.TiposBasicos.Double)
+            {
+                // Si el tipo anterior no es int ni double, hay un error de tipos
+                throw new Exception("Error de tipos: se esperaba un valor numérico");
+            }
+            if (tipoActual != TipoBasico.TiposBasicos.Int && tipoActual != TipoBasico.TiposBasicos.Double)
+            {
+                // Si el tipo actual no es int ni double, hay un error de tipos
+                throw new Exception("Error de tipos: se esperaba un valor numérico");
+            }
+            if (tipoAnterior != tipoActual)
+            {
+                // Si los tipos son diferentes, hay un error de tipos
+                throw new Exception("Error de tipos: los operandos no son del mismo tipo");
+            }
             Visit(context.mulop(i - 1));
-            Visit(context.factor(i));
+            tipoAnterior = tipoActual;
         }
-        return null;
+        return tipoAnterior;
     }
 
+
     // factor : designator (LEFTPAREN (actPars)? RIGHTPAREN)?
+    // falta implementar verificacion de tipos
     public override object VisitDesignFactorAST(MiniCSharpParser.DesignFactorASTContext context)
     {
         Visit(context.designator());
@@ -499,8 +641,7 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
     // factor : LEFTPAREN expr RIGHTPAREN 
     public override object VisitExprInparentFactorAST(MiniCSharpParser.ExprInparentFactorASTContext context)
     {
-        Visit(context.expr());
-        return null;
+        return Visit(context.expr());;
     }
 
     // designator : ident (DOT ident | LEFTSBRACK expr RIGHTSBRACK)* 
@@ -567,4 +708,10 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
         // nothing to visit
         return null;
     }
+    
+    private void ReportError(string message, IToken token)
+    {
+        laCsTablaSimbolos.consola.SalidaConsola.Text += $"Line {token.Line}, column {token.Column}: error: {message}";
+    }
+
 }

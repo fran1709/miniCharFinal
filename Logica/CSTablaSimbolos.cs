@@ -24,6 +24,18 @@ public class CSTablaSimbolos
         ident.nivel = nivelActual;
         tabla.AddLast(ident);
     }
+    public T buscarObjetoTipo<T>(string nombre) where T : Tipo
+    {
+        foreach (object id in tabla)
+        {
+            T obj = id as T;
+            if (obj != null && obj.tok.Text.Equals(nombre))
+            {
+                return obj;
+            }
+        }
+        return null;
+    }
 
     public Clase buscarClase(string nombre)
     {

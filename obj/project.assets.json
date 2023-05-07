@@ -2179,19 +2179,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Mariana Artavia Vene\\.nuget\\packages\\": {}
+    "C:\\Users\\franj\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Mariana Artavia Vene\\Documents\\GitHub\\miniCharFinal\\miniChart.csproj",
+      "projectUniqueName": "C:\\Users\\franj\\Documents\\Compiladores\\miniCharFinal\\miniChart.csproj",
       "projectName": "miniChart",
-      "projectPath": "C:\\Users\\Mariana Artavia Vene\\Documents\\GitHub\\miniCharFinal\\miniChart.csproj",
-      "packagesPath": "C:\\Users\\Mariana Artavia Vene\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Mariana Artavia Vene\\Documents\\GitHub\\miniCharFinal\\obj\\",
+      "projectPath": "C:\\Users\\franj\\Documents\\Compiladores\\miniCharFinal\\miniChart.csproj",
+      "packagesPath": "C:\\Users\\franj\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\franj\\Documents\\Compiladores\\miniCharFinal\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Mariana Artavia Vene\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\franj\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -2245,7 +2245,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
       }
     }
   }

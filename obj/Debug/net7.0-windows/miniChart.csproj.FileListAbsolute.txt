@@ -85,3 +85,32 @@ C:\Users\franj\source\repos\Proyectos Compi\miniCharFinal\obj\Debug\net7.0-windo
 C:\Users\franj\source\repos\Proyectos Compi\miniCharFinal\obj\Debug\net7.0-windows\miniChart.pdb
 C:\Users\franj\source\repos\Proyectos Compi\miniCharFinal\obj\Debug\net7.0-windows\miniChart.genruntimeconfig.cache
 C:\Users\franj\source\repos\Proyectos Compi\miniCharFinal\obj\Debug\net7.0-windows\ref\miniChart.dll
+C:\Users\franj\Documents\Compiladores\miniCharFinal\bin\Debug\net7.0-windows\miniChart.exe
+C:\Users\franj\Documents\Compiladores\miniCharFinal\bin\Debug\net7.0-windows\miniChart.deps.json
+C:\Users\franj\Documents\Compiladores\miniCharFinal\bin\Debug\net7.0-windows\miniChart.runtimeconfig.json
+C:\Users\franj\Documents\Compiladores\miniCharFinal\bin\Debug\net7.0-windows\miniChart.dll
+C:\Users\franj\Documents\Compiladores\miniCharFinal\bin\Debug\net7.0-windows\miniChart.pdb
+C:\Users\franj\Documents\Compiladores\miniCharFinal\bin\Debug\net7.0-windows\Antlr4.Runtime.Standard.dll
+C:\Users\franj\Documents\Compiladores\miniCharFinal\bin\Debug\net7.0-windows\Antlr4BuildTasks.dll
+C:\Users\franj\Documents\Compiladores\miniCharFinal\bin\Debug\net7.0-windows\Microsoft.Build.Framework.dll
+C:\Users\franj\Documents\Compiladores\miniCharFinal\bin\Debug\net7.0-windows\Microsoft.Build.Utilities.Core.dll
+C:\Users\franj\Documents\Compiladores\miniCharFinal\bin\Debug\net7.0-windows\Microsoft.NET.StringTools.dll
+C:\Users\franj\Documents\Compiladores\miniCharFinal\obj\Debug\net7.0-windows\miniChart.csproj.AssemblyReference.cache
+C:\Users\franj\Documents\Compiladores\miniCharFinal\obj\Debug\net7.0-windows\Consola.g.cs
+C:\Users\franj\Documents\Compiladores\miniCharFinal\obj\Debug\net7.0-windows\MainWindow.g.cs
+C:\Users\franj\Documents\Compiladores\miniCharFinal\obj\Debug\net7.0-windows\App.g.cs
+C:\Users\franj\Documents\Compiladores\miniCharFinal\obj\Debug\net7.0-windows\miniChart_MarkupCompile.cache
+C:\Users\franj\Documents\Compiladores\miniCharFinal\obj\Debug\net7.0-windows\miniChart_MarkupCompile.lref
+C:\Users\franj\Documents\Compiladores\miniCharFinal\obj\Debug\net7.0-windows\Consola.baml
+C:\Users\franj\Documents\Compiladores\miniCharFinal\obj\Debug\net7.0-windows\MainWindow.baml
+C:\Users\franj\Documents\Compiladores\miniCharFinal\obj\Debug\net7.0-windows\miniChart.g.resources
+C:\Users\franj\Documents\Compiladores\miniCharFinal\obj\Debug\net7.0-windows\miniChart.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\franj\Documents\Compiladores\miniCharFinal\obj\Debug\net7.0-windows\miniChart.AssemblyInfoInputs.cache
+C:\Users\franj\Documents\Compiladores\miniCharFinal\obj\Debug\net7.0-windows\miniChart.AssemblyInfo.cs
+C:\Users\franj\Documents\Compiladores\miniCharFinal\obj\Debug\net7.0-windows\miniChart.csproj.CoreCompileInputs.cache
+C:\Users\franj\Documents\Compiladores\miniCharFinal\obj\Debug\net7.0-windows\miniChart.csproj.CopyComplete
+C:\Users\franj\Documents\Compiladores\miniCharFinal\obj\Debug\net7.0-windows\miniChart.dll
+C:\Users\franj\Documents\Compiladores\miniCharFinal\obj\Debug\net7.0-windows\refint\miniChart.dll
+C:\Users\franj\Documents\Compiladores\miniCharFinal\obj\Debug\net7.0-windows\miniChart.pdb
+C:\Users\franj\Documents\Compiladores\miniCharFinal\obj\Debug\net7.0-windows\miniChart.genruntimeconfig.cache
+C:\Users\franj\Documents\Compiladores\miniCharFinal\obj\Debug\net7.0-windows\ref\miniChart.dll
