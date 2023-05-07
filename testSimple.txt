@@ -13,7 +13,8 @@ class P
     msg[2] = 'r';
     msg[3] = 'r';
     msg[4] = msg[3];
-    read(msg[3]) ;    
+    read(msg[3]) ;  
+    write(x,2);  
   }
 }
 
