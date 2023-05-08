@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.JavaScript;
 using Antlr4.Runtime;
-using Antlr4.Runtime.Misc;
 using miniChart.Logica.TypeManager;
 
 namespace miniChart.Logica;
@@ -74,36 +74,46 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
         //Se recorren todas las variables (cuando se declaran de un mismo tipo separadas por coma)
         for (int i = 0; i < context.ident().Length; i++)
         {
-            
             int idType = (int)Visit(context.type()); //Se verifica el tipo de datos de la variable
             IToken id = (IToken) Visit(context.ident(i));
-            if (TipoBasico.isTipoBasico(context.type().GetText()))
+            Tipo varType = laCsTablaSimbolos.buscarObjetoTipo<Tipo>(id.Text);
+            if (varType == null)
             {
-                TipoBasico tipo = new TipoBasico(id, idType);
-                laCsTablaSimbolos.insertar(tipo);
-
-            }
-
-            if (Arreglo.isTipoArreglo(context.type().GetText()))
-            {
-                Arreglo arreglo = new Arreglo(id, idType);
-                laCsTablaSimbolos.insertar(arreglo);
-            }
-
-            if (TipoClase.IsTipoClase(context.type().GetText()))
-            {
-                Clase searched = laCsTablaSimbolos.buscarObjetoTipo<Clase>(context.type().GetText());
-                if (searched != null)
+                if (TipoBasico.isTipoBasico(context.type().GetText()))
                 {
-                    TipoClase tipoClase = new TipoClase(id, context.type().GetText());
-                    laCsTablaSimbolos.insertar(tipoClase);
-                }
-                else
-                {
-                    laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de tipos: Tipo: \"" + context.type().GetText() + "\" no es un tipo válido." + ShowErrorPosition(context.type().Start) + "\n";
+                    TipoBasico tipo = new TipoBasico(id, idType);
+                    laCsTablaSimbolos.insertar(tipo);
+
                 }
 
+                else if (Arreglo.isTipoArreglo(context.type().GetText()))
+                {
+                    Arreglo arreglo = new Arreglo(id, idType);
+                    laCsTablaSimbolos.insertar(arreglo);
+                }
+
+                else if (TipoClase.IsTipoClase(context.type().GetText()))
+                {
+                    Clase searched = laCsTablaSimbolos.buscarObjetoTipo<Clase>(context.type().GetText());
+                    if (searched != null)
+                    {
+                        TipoClase tipoClase = new TipoClase(id, context.type().GetText());
+                        laCsTablaSimbolos.insertar(tipoClase);
+                    }
+                    else
+                    {
+                        laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de tipos: Tipo: \"" + context.type().GetText() + "\" no es un tipo válido." + ShowErrorPosition(context.type().Start) + "\n";
+                    }
+
+                }
+                
             }
+            else
+            {
+                laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de declaracion: El identificador: \"" + id.Text + "\" ya ha sido declarado." + ShowErrorPosition(id) + "\n";
+ 
+            }
+            
         }
 
         return null;
@@ -113,42 +123,56 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
     public override object VisitClassDeclaAST(MiniCSharpParser.ClassDeclaASTContext context)
     {
         IToken id = context.ident().Start;
-        if (Clase.IsClase(id.Text))
+        Clase claseBuscada = laCsTablaSimbolos.buscarObjetoTipo<Clase>(id.Text);
+        
+        if (Clase.IsClase(id.Text) && claseBuscada == null)
         {
             Clase clase = new Clase(id);
             laCsTablaSimbolos.insertar(clase);
+            laCsTablaSimbolos.openScope();
+            //Se recorren las declaraciones de las variables de la clase
+            for (int i = 0; i < context.varDecl().Length; i++)
+            {
+                Visit(context.varDecl(i));
+            }
+            laCsTablaSimbolos.CloseScope();
         }
-        laCsTablaSimbolos.openScope();
-        //Se recorren las declaraciones de las variables de la clase
-        for (int i = 0; i < context.varDecl().Length; i++)
+        else
         {
-            Visit(context.varDecl(i));
+            laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de declaracion: La clase: \"" + id.Text + "\" ya ha sido declarada." + ShowErrorPosition(id) + "\n";
         }
-        laCsTablaSimbolos.CloseScope();
         return null;
     }
 
     // methodDecl : (type | VOID) ident LEFTPAREN formPars? RIGHTPAREN block
     public override object VisitMethDeclaAST(MiniCSharpParser.MethDeclaASTContext context)
     {
-        int idType = (int)Metodo.TipoMetodo.Void;
-        if (context.VOID() == null)
-        {
-            idType = (int) Visit(context.type());
-        }
         IToken id = (IToken) Visit(context.ident());
-        Metodo metodo = new Metodo(id, idType);
-        
-        //Visita a los parametros del método
-        if (context.formPars() != null)
+        Metodo metodoBuscado = laCsTablaSimbolos.buscarObjetoTipo<Metodo>(id.Text);
+        if (metodoBuscado == null)
         {
-            metodo.parametros = (LinkedList<object>)Visit(context.formPars());
-            metodo.cantidadParam = metodo.parametros.Count;
-        }
+            int idType = (int)Metodo.TipoMetodo.Void;
+            if (context.VOID() == null)
+            {
+                idType = (int) Visit(context.type());
+            }
+            Metodo metodo = new Metodo(id, idType);
         
-        //Visita al bloque del método
-        Visit(context.block());
-        laCsTablaSimbolos.insertar(metodo);
+            //Visita a los parametros del método
+            if (context.formPars() != null)
+            {
+                metodo.parametros = (LinkedList<object>)Visit(context.formPars());
+                metodo.cantidadParam = metodo.parametros.Count;
+            }
+        
+            //Visita al bloque del método
+            Visit(context.block());
+            laCsTablaSimbolos.insertar(metodo);
+        }
+        else
+        {
+            laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de declaracion: El metodo: \"" + id.Text + "\" ya ha sido declarado." + ShowErrorPosition(id) + "\n";
+        }
         return null;
     }
 
@@ -221,15 +245,23 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
     // statement : designator (ASSIGN expr | LEFTPAREN actPars? RIGHTPAREN | PLUSPLUS | MINUSMINUS) SEMICOLON 
     public override object VisitAssignStatementAST(MiniCSharpParser.AssignStatementASTContext context)
     {
-        Visit(context.designator());
-        if (context.expr() != null)
+        try
         {
-            Visit(context.expr());
-        } else if (context.actPars() != null)
-        {
-            Visit(context.actPars());
-        }
+            int idType = (int)Visit(context.designator());
+            if (context.expr() != null)
+            {
+                Visit(context.expr());
+            } else if (context.actPars() != null)
+            {
+                Visit(context.actPars());
+            }
 
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
         return null;
     }
 
@@ -613,15 +645,59 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
     // designator : ident (DOT ident | LEFTSBRACK expr RIGHTSBRACK)* 
     public override object VisitDesignatorAST(MiniCSharpParser.DesignatorASTContext context)
     {
-        Visit(context.ident(0));
-        for (int i = 1; i < context.ident().Length; i++)
+        IToken id = (IToken)Visit(context.ident(0));
+        Tipo varType = laCsTablaSimbolos.buscarObjetoTipo<Tipo>(id.Text);
+        if (context.ident().Length == 1)
         {
-            Visit(context.ident(i));
+            if (varType != null)
+            {
+                switch (varType)
+                {
+                    case Arreglo arreglo:
+                        return arreglo.tipoDato;
+                    case TipoBasico basico:
+                        return basico.tipoDato;
+                    case TipoClase clase:
+                        return clase.tok.Text;
+                }
+            }
+            else
+            {
+                laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de alcances, identificador \"" + id.Text + "\" no declarado en asignación." + ShowErrorPosition(id);
+            }
+            
+            
         }
-        
-        for (int i = 0; i < context.expr().Length; i++)
+        else
         {
-            Visit(context.expr(i));
+            for (int i = 1; i < context.ident().Length; i++)
+            {
+                id = (IToken)Visit(context.ident(i));
+                varType = laCsTablaSimbolos.buscarObjetoTipo<Tipo>(id.Text);
+                if (varType != null)
+                {
+                    switch (varType)
+                    {
+                        case Arreglo arreglo:
+                            return arreglo.tipoDato;
+                        case TipoBasico basico:
+                            return basico.tipoDato;
+                        case TipoClase clase:
+                            return clase.tok.Text;
+                    }
+                }
+                else
+                {
+                    laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de alcances, identificador \"" + id.Text + "\" no declarado en asignación." + ShowErrorPosition(id);
+                    break;
+                }
+            }
+            
+            for (int i = 0; i < context.expr().Length; i++)
+            {
+                Visit(context.expr(i));
+            }
+            
         }
         return null;
     }

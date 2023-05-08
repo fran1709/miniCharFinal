@@ -37,46 +37,14 @@ public class CSTablaSimbolos
         return null;
     }
 
-    public Tipo Buscar(string nombre)
-    {
-        foreach (object id in tabla)
-        {
-            Clase clase = id as Clase;
-            if (clase != null && clase.tok.Text.Equals(nombre))
-            {
-                return clase;
-            }
-            Arreglo arreglo = id as Arreglo;
-            if (arreglo != null && arreglo.tok.Text.Equals(nombre))
-            {
-                return arreglo;
-            }
-            TipoBasico tipoB = id as TipoBasico;                          
-            if (tipoB != null && tipoB.tok.Text.Equals(nombre))   
-            {                                                         
-                return tipoB;                                       
-            }    
-            TipoClase tipoC = id as TipoClase;                          
-            if (tipoC != null && tipoC.tok.Text.Equals(nombre))   
-            {                                                         
-                return tipoC;                                       
-            }    
-            Metodo metodo = id as Metodo;                          
-            if (metodo != null && metodo.tok.Text.Equals(nombre))   
-            {                                                         
-                return metodo;                                       
-            }                                                         
-        }
-        return null;
-    }
-    
     public void openScope(){
         nivelActual++;
     }
     
     public void CloseScope()
     {
-        /*foreach (var item in tabla.ToList())
+        /*Imprimir();
+        foreach (var item in tabla.ToList())
         {
             if (((Tipo)item).nivel == nivelActual)
             {
