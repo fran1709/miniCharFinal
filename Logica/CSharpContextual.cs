@@ -247,7 +247,7 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
     {
         try
         {
-            int idType = (int)Visit(context.designator());
+            var idType = Visit(context.designator());
             if (context.expr() != null)
             {
                 Visit(context.expr());
@@ -260,7 +260,7 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
         catch (Exception e)
         {
             Console.WriteLine(e);
-            throw;
+            throw e;
         }
         return null;
     }
@@ -490,8 +490,7 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
     // duda con la verificacion de tipos de los parametros de los metodos
     public override object VisitActParsAST(MiniCSharpParser.ActParsASTContext context)
     {
-        int result = -1;
-        Visit(context.expr(0));
+        var type = Visit(context.expr(0));
         if (context.expr().Length > 1)
         {
             for (int i = 1; i < context.expr().Length; i++)
@@ -499,7 +498,7 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
                 Visit(context.expr(i));
             }
         }
-        return result;
+        return type;
     }
 
     // condition : condTerm (OR condTerm)*
@@ -544,59 +543,94 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
 
 
     // cast : LEFTPAREN type RIGHTPAREN  
-    // falta implementar verificacion de tipos
+    // retorna el valor numerico del tipo visitado, si es clase retorna error = 6
     public override object VisitCastAST(MiniCSharpParser.CastASTContext context)
     {
-
-        int type = (int) Visit(context.type());
-        //falta verificar
-        return null;
+        return Visit(context.type());
     }
 
     // expr : MINUS? cast? term (addop term)* 
-    // falta implementar verificacion de tipos
+    // falta verificacion del CASTEO
     public override object VisitExprAST(MiniCSharpParser.ExprASTContext context)
     {
+        
         if (context.cast() != null)
         {
+            var casteo = (int)Visit(context.cast());
+            if (casteo == 6)
+            {
+                laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de expresión, despues se explica";
+            }
             Visit(context.cast());
         }
-        Visit(context.term(0));
+        /*
+         *
+         * 
+         * DUDA CON EL CASTEO !!!!!
+         *
+         * 
+         */
+        var type = Visit(context.term(0));
     
         for (int i = 1; i < context.term().Length; i++)
         {
+            var type2 = Visit(context.term(i));
+            if (type != type2)
+            {
+                laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de tipos " + type + " y " + type2 + " no son compatibles. Solo se aceptan de tipo INT" + ShowErrorPosition(context.term(0).Start) + "\n";
+            }
+            if (!isMultiply(context.term(i - 1).GetText()))
+            {
+                laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de operando " + context.addop(i-1).GetText() + " no es permtido en este caso. " + ShowErrorPosition(context.addop(0).Start) + "\n";
+            }
             Visit(context.addop(i - 1));
-            Visit(context.term(i));
         }
-        return null;
+        return type;
     }
-
-
-
+    
     // term : factor (mulop factor)* 
-    // Verificar tipos
+    // retorna el type del primer factor, sino null en teoria
     public override object VisitTermAST(MiniCSharpParser.TermASTContext context)
     {
-        Visit(context.factor(0));
+        // tipo de factor
+        var type = Visit(context.factor(0));
         for (int i = 1; i < context.factor().Length; i++)
         {
+            var type2 = Visit(context.factor(i));
+            if (type != type2)
+            {
+                laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de tipos " + type + " y " + type2 + " no son compatibles. Solo se aceptan de tipo INT" + ShowErrorPosition(context.factor(0).Start) + "\n";
+            } 
+            if (!isMultiply(context.mulop(i - 1).GetText()))
+            {
+                laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de operando " + context.mulop(i-1).GetText() + " no es permtido en este caso. " + ShowErrorPosition(context.mulop(0).Start) + "\n";
+            }
             Visit(context.mulop(i - 1));
-            Visit(context.factor(i));
         }
-        return null;
+        return type;
     }
 
+    public bool isMultiply(string type)
+    {
+        switch (type)
+        {
+            case "==" : return true;
+            case "!=" : return true;
+            default: return false;
+        }
+        return true;
+    }
 
     // factor : designator (LEFTPAREN (actPars)? RIGHTPAREN)?
-    // falta implementar verificacion de tipos
+    // retorna el tipo de designator
     public override object VisitDesignFactorAST(MiniCSharpParser.DesignFactorASTContext context)
     {
-        Visit(context.designator());
+        var type = Visit(context.designator());
         if (context.actPars() != null)
         {
             Visit(context.actPars());
         }
-        return null;
+        return type;
     }
 
     // factor : CHARCONST
@@ -630,10 +664,17 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
     }
 
     // factor : NEW ident
+    // retorna el IToken
     public override object VisitNewIdentFactorAST(MiniCSharpParser.NewIdentFactorASTContext context)
     {
-        Visit(context.ident());
-        return null;
+        IToken token = (IToken)Visit(context.ident());
+        string type = token.Text;
+        if (!TipoBasico.isTipoBasico(type))
+        { 
+            laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de tipos, se esperaba un tipo válido (int,string,cha,bool,double) , se encontró " + token.Text + "\n" + ShowErrorPosition(context.ident().Start)  +"\n";
+            return null;
+        }
+        return token;
     }
 
     // factor : LEFTPAREN expr RIGHTPAREN 
@@ -645,7 +686,7 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
     // designator : ident (DOT ident | LEFTSBRACK expr RIGHTSBRACK)* 
     public override object VisitDesignatorAST(MiniCSharpParser.DesignatorASTContext context)
     {
-        IToken id = (IToken)Visit(context.ident(0));
+        IToken id = (IToken)Visit(context.ident(0)); //tipo de identidad
         Tipo varType = laCsTablaSimbolos.buscarObjetoTipo<Tipo>(id.Text);
         if (context.ident().Length == 1)
         {
@@ -665,8 +706,6 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
             {
                 laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de alcances, identificador \"" + id.Text + "\" no declarado en asignación." + ShowErrorPosition(id);
             }
-            
-            
         }
         else
         {
@@ -692,61 +731,75 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
                     break;
                 }
             }
-            
             for (int i = 0; i < context.expr().Length; i++)
             {
                 Visit(context.expr(i));
             }
-            
         }
         return null;
     }
 
     // ident : INT_ID
+    // retorna IToken
     public override object VisitIntIdIdentAST(MiniCSharpParser.IntIdIdentASTContext context)
     {
         return context.INT_ID().Symbol;
     }
 
     // ident : CHAR_ID
+    // retorna IToken
     public override object VisitCharIdIdentAST(MiniCSharpParser.CharIdIdentASTContext context)
     {
         return context.CHAR_ID().Symbol;
     }
 
     // ident : DOUBLE_ID
+    // retorna IToken
     public override object VisitDoubIdIdentAST(MiniCSharpParser.DoubIdIdentASTContext context)
     {
         return context.DOUBLE_ID().Symbol;
     }
 
     // ident : BOOL_ID
+    // retorna IToken
     public override object VisitBoolIdIdentAST(MiniCSharpParser.BoolIdIdentASTContext context)
     {
         return context.BOOL_ID().Symbol;
     }
 
     // ident : STRING_ID
+    // retorna IToken
     public override object VisitStrIdIdentAST(MiniCSharpParser.StrIdIdentASTContext context)
     {
         return context.STRING_ID().Symbol;
     }
 
     // ident : IDENTIFIER
+    // retorna IToken
     public override object VisitIdentifierIdentAST(MiniCSharpParser.IdentifierIdentASTContext context)
     {
         return context.IDENTIFIER().Symbol;
     }
 
     // ident : LIST
+    // retorna IToken
     public override object VisitListIdentAST(MiniCSharpParser.ListIdentASTContext context)
     {
         return context.LIST().Symbol;
     }
-    
-    private void ReportError(string message, IToken token)
+
+    public override object VisitRelop(MiniCSharpParser.RelopContext context)
     {
-        laCsTablaSimbolos.consola.SalidaConsola.Text += $"Line {token.Line}, column {token.Column}: error: {message}";
+        return context.GetChild(0);
     }
 
+    public override object VisitAddop(MiniCSharpParser.AddopContext context)
+    {
+        return context.GetChild(0);
+    }
+
+    public override object VisitMulop(MiniCSharpParser.MulopContext context)
+    {
+        return context.GetChild(0);
+    }
 }

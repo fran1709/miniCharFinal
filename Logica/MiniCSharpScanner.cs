@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from C:/Users/Mariana Artavia Vene/Documents/GitHub/miniCharFinal/Logica\MiniCSharpScanner.g4 by ANTLR 4.11.1
+// Generated from C:/Users/franj/source/repos/Proyectos Compi/miniCharFinal/Logica\MiniCSharpScanner.g4 by ANTLR 4.11.1
 
 // Unreachable code detected
 #pragma warning disable 0162
