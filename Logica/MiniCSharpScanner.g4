@@ -22,14 +22,6 @@ READ            : 'read';
 WRITE           : 'write';
 NEW             : 'new';
 
-//Procedimientos para listas
-DELMETHOD             : '.del';
-ADDMETHOD             : '.add';
-LENMETHOD             : '.len';
-DEL                   : 'del';
-ADD                   : 'add';
-LEN                   : 'len';
-
 /*Constantes*/
 BOOL            : 'true' | 'false';
 

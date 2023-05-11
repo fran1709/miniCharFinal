@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Antlr4.Runtime;
 using miniChart.Logica.TypeManager;
 
 namespace miniChart.Logica;
@@ -36,7 +34,7 @@ public class CSTablaSimbolos
         }
         return null;
     }
-
+    
     public void openScope(){
         nivelActual++;
     }

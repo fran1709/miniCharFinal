@@ -1,4 +1,5 @@
-﻿using Antlr4.Runtime;
+﻿using System.Text.RegularExpressions;
+using Antlr4.Runtime;
 
 namespace miniChart.Logica.TypeManager;
 
@@ -22,7 +23,7 @@ public class Arreglo : Tipo
     
     public static bool isTipoArreglo(string tipo)
     {
-        return tipo.Equals("int[]") || tipo.Equals("char[]");
+        return Regex.IsMatch(tipo, "^(int|char)\\[[\\w\\s]*\\]$");
     }
     
     public override string ToString()

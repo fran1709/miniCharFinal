@@ -2179,19 +2179,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\franj\\.nuget\\packages\\": {}
+    "C:\\Users\\Mariana Artavia Vene\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\franj\\source\\repos\\Proyectos Compi\\miniCharFinal\\miniChart.csproj",
+      "projectUniqueName": "C:\\Users\\Mariana Artavia Vene\\Documents\\GitHub\\miniCharFinal\\miniChart.csproj",
       "projectName": "miniChart",
-      "projectPath": "C:\\Users\\franj\\source\\repos\\Proyectos Compi\\miniCharFinal\\miniChart.csproj",
-      "packagesPath": "C:\\Users\\franj\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\franj\\source\\repos\\Proyectos Compi\\miniCharFinal\\obj\\",
+      "projectPath": "C:\\Users\\Mariana Artavia Vene\\Documents\\GitHub\\miniCharFinal\\miniChart.csproj",
+      "packagesPath": "C:\\Users\\Mariana Artavia Vene\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Mariana Artavia Vene\\Documents\\GitHub\\miniCharFinal\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\franj\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Mariana Artavia Vene\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

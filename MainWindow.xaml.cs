@@ -150,10 +150,6 @@ namespace miniChart
             {
                 var mv = new CSharpContextual();
                 mv.Visit(treeContext);
-                
-                Resultado.Content = "Compilación éxitosa!";
-                consola.SalidaConsola.Text = Resultado.Content.ToString() + "\n";
-                consola.Show();
             }
         }
     }

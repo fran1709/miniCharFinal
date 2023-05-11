@@ -39,7 +39,7 @@ public class TipoBasico : Tipo
             case (int)TiposBasicos.Char: return TiposBasicos.Char.ToString().ToLower();
             case (int)TiposBasicos.String: return TiposBasicos.String.ToString().ToLower();
             case (int)TiposBasicos.Boolean: return TiposBasicos.Boolean.ToString().ToLower();
-            default: return TiposBasicos.Error.ToString();
+            default: return TiposBasicos.Error.ToString().ToLower();
         }
     }
 

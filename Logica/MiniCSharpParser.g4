@@ -26,9 +26,6 @@ statement : designator (ASSIGN expr | LEFTPAREN actPars? RIGHTPAREN | PLUSPLUS |
           | RETURN expr? SEMICOLON                                                                             #returnStatementAST
           | READ LEFTPAREN designator RIGHTPAREN SEMICOLON                                                     #whileNumberStatementAST
           | WRITE LEFTPAREN expr (COMMA (INT | DOUBLE))? RIGHTPAREN SEMICOLON                                  #writeNumberStatementAST
-          | designator ADDMETHOD LEFTPAREN (designator | INT) (COMMA (designator | INT))* RIGHTPAREN SEMICOLON #designAddMethStatementAST
-          | designator LENMETHOD LEFTPAREN RIGHTPAREN SEMICOLON                                                #designLenMethStatementAST
-          | designator DELMETHOD LEFTPAREN INT RIGHTPAREN SEMICOLON                                            #designDelMethStatementAST
           | block                                                                                              #blockStatementAST
           | SEMICOLON                                                                                          #semicolonStatementAST;
 
@@ -57,6 +54,15 @@ factor : designator (LEFTPAREN (actPars)? RIGHTPAREN)?                          
        | NEW ident                                                                                             #newIdentFactorAST
        | LEFTPAREN expr RIGHTPAREN                                                                             #exprInparentFactorAST;
 
+ident : INT_ID                                                                                                 #intIdIdentAST
+        | CHAR_ID                                                                                              #charIdIdentAST
+        | DOUBLE_ID                                                                                            #doubIdIdentAST
+        | BOOL_ID                                                                                              #boolIdIdentAST
+        | STRING_ID                                                                                            #strIdIdentAST
+        | IDENTIFIER                                                                                           #identifierIdentAST
+        | LIST                                                                                                 #listIdentAST
+        ;    
+
 designator : ident (DOT ident | LEFTSBRACK expr RIGHTSBRACK)*                                                  #designatorAST;
 
 relop : EQUALS                                                                                                  
@@ -73,11 +79,4 @@ mulop : MULT
         | DIV                                                                                                  
         | MOD                                                                                                  #mulopAST;
 
-ident : INT_ID                                                                                                 #intIdIdentAST
-        | CHAR_ID                                                                                              #charIdIdentAST
-        | DOUBLE_ID                                                                                            #doubIdIdentAST
-        | BOOL_ID                                                                                              #boolIdIdentAST
-        | STRING_ID                                                                                            #strIdIdentAST
-        | IDENTIFIER                                                                                           #identifierIdentAST
-        | LIST                                                                                                 #listIdentAST
-        ;        
+    
