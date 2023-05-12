@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using miniChart.Logica.TypeManager;
 
 namespace miniChart.Logica;
@@ -41,14 +42,14 @@ public class CSTablaSimbolos
     
     public void CloseScope()
     {
-        /*Imprimir();
+        Imprimir();
         foreach (var item in tabla.ToList())
         {
             if (((Tipo)item).nivel == nivelActual)
             {
                 tabla.Remove(item);
             }
-        }*/
+        }
         nivelActual--;
     }
     

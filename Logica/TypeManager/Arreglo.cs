@@ -11,13 +11,11 @@ public class Arreglo : Tipo
         Char,
         Error,
     }
-    
-    public readonly string tipo;
+
     public readonly int tipoDato;
     
-    public Arreglo(IToken tok, int td) : base(tok)
+    public Arreglo(IToken tok, int td) : base(tok, "array")
     {
-        tipo = "array";
         tipoDato = td;
     }
     

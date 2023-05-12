@@ -7,14 +7,12 @@ namespace miniChart.Logica.TypeManager;
 
 public class Clase : Tipo
 {
-    public readonly string tipo;
     public readonly string tipoDato;
     public LinkedList<Object> variables;
     public LinkedList<Object> metodos;
     
-    public Clase(IToken tok) : base(tok)
+    public Clase(IToken tok) : base(tok, "clase")
     {
-        tipo = "clase";
         tipoDato = "null";
         variables = new LinkedList<object>();
         metodos = new LinkedList<object>();

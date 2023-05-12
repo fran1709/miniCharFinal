@@ -157,9 +157,17 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
             for (int i = 0; i < context.varDecl().Length; i++)
             {
                 LinkedList<object> classVars = (LinkedList<object>)Visit(context.varDecl(i));
-                foreach (object variable in classVars)
+                foreach (Tipo variable in classVars)
                 {
-                    clase.addVariable(variable);
+                    if (variable is TipoBasico)
+                    {
+                        clase.addVariable(variable);
+                    }
+                    else
+                    {
+                        laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de declaracion: El tipo de variable \"" + variable.tipo + "\" no es permitido en la clase." + ShowErrorPosition(variable.tok) + "\n";
+
+                    }
                 }
             }
             laCsTablaSimbolos.CloseScope();
@@ -273,23 +281,26 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
     // statement : designator (ASSIGN expr | LEFTPAREN actPars? RIGHTPAREN | PLUSPLUS | MINUSMINUS) SEMICOLON 
     public override object VisitAssignStatementAST(MiniCSharpParser.AssignStatementASTContext context)
     {
-        
-            Object idType = Visit(context.designator());
-            if (context.expr() != null)
+        var idType = Visit(context.designator());
+        if (idType is TipoBasico.TiposBasicos type && (int)type == (int)TipoBasico.TiposBasicos.Error)
+        {
+            laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de alcances, identificador \"" + context.designator().GetText() + "\" no declarado en asignación." + ShowErrorPosition(context.designator().Start) +"\n";
+        }
+            
+        if (context.expr() != null)
+        {
+            var exprType = Visit(context.expr());
             {
-                Object exprType = Visit(context.expr());
-                if (exprType == idType)
-                {
-                    
-                }
-                
-            } else if (context.actPars() != null)
-            {
-                Visit(context.actPars());
-            }
+                if (exprType is TipoBasico.TiposBasicos && !exprType.Equals(idType) || exprType is string type3 && !type3.Equals(idType))
+                    laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de tipos: \""+ idType + "\" y \"" + exprType + "\" no son compatibles." + ShowErrorPosition(context.ASSIGN().Symbol) +"\n";
 
-        
-            return null;
+            }
+                
+        } else if (context.actPars() != null)
+        {
+            Visit(context.actPars());
+        }
+        return null;
     }
 
     // statement : IF LEFTPAREN condition RIGHTPAREN statement (ELSE statement)?  
@@ -451,13 +462,6 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
         return null;
     }
 
-    // statement : SEMICOLON
-    public override object VisitSemicolonStatementAST(MiniCSharpParser.SemicolonStatementASTContext context)
-    {
-        // nothing to visit
-        return null;
-    }
-
     // block : LEFTBRACK (varDecl | statement)* RIGHTBRACK
     public override object VisitBlockAST(MiniCSharpParser.BlockASTContext context)
     {
@@ -466,8 +470,7 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
         {
             Visit(context.varDecl(i));
         }
-
-       
+        
         for (int i = 0; i < context.statement().Length; i++)
         {
             Visit(context.statement(i));
@@ -523,7 +526,6 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
     }
 
     // condFact : expr RELOP expr
-    // falta implementar verificacion de tipos
     public override object VisitCondFactAST(MiniCSharpParser.CondFactASTContext context)
     {
         var type1 = (int) Visit(context.expr(0));
@@ -565,7 +567,7 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
         /*
          *
          * 
-         * DUDA CON EL CASTEO !!!!!
+         * DUDA CON EL CASTEO !!!!! SE DEBE VERIFICAR SI EL TIPO DEL TERM ES COMPATIBLE CON EL CASTEO Y RETORNAR EL TIPO DEL CAST
          *
          * 
          */
@@ -662,7 +664,24 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
             laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de tipos, se esperaba una el nombre de una clase o un array, se encontró " + token.Text + "\n" + ShowErrorPosition(context.ident().Start)  +"\n";
             return null;
         }
-        return token;
+
+        switch (type)
+        {
+            case "int[]":
+                return TipoBasico.TiposBasicos.Int;
+            case "char[]":
+                return TipoBasico.TiposBasicos.Char;
+            default:
+            {
+                Clase newClase = laCsTablaSimbolos.buscarObjetoTipo<Clase>(type);
+                if (newClase != null)
+                {
+                    return newClase.tok.Text;
+                }
+                break;
+            }
+        }
+        return null;
     }
 
     // factor : LEFTPAREN expr RIGHTPAREN 
@@ -674,7 +693,7 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
     // designator : ident (DOT ident | LEFTSBRACK expr RIGHTSBRACK)* 
     public override object VisitDesignatorAST(MiniCSharpParser.DesignatorASTContext context)
     {
-        Object varType = null;
+        Tipo varType = null;
 
         for (int i = 0; i < context.ident().Length; i++)
         {
@@ -690,63 +709,58 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
                 if (varType is TipoClase claseType)
                 {
                     Clase clase = laCsTablaSimbolos.buscarObjetoTipo<Clase>(claseType.tipoDato);
-                    varType = clase.buscarAtributo<Tipo>(id);
-                }
-                else if (varType is Arreglo arregloType)
-                {
-                    if (context.expr().Length == 0)
+                    if (id != null)
                     {
-                        return arregloType.tipoDato;
+                        varType = clase.buscarAtributo<TipoBasico>(id);
+                        if (varType == null)
+                        {
+                            laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de alcances, atributo \"" + id + "\" no encontrado en la clase \"" + clase.tok.Text + "\"." + ShowErrorPosition(idToken) + "\n";
+                            return TipoBasico.TiposBasicos.Error;
+                        }
                     }
-                    
-                    var exprType = (int)Visit(context.expr(0));
-                    if (exprType != (int)TipoBasico.TiposBasicos.Int)
-                    {
-                        laCsTablaSimbolos.consola.SalidaConsola.Text +=
-                            "Error: la expresión entre corchetes debe ser de tipo int" +
-                            ShowErrorPosition(context.expr(0).Start) + "\n";
-                        return TipoBasico.TiposBasicos.Error;
-                    }
-
-                    varType = arregloType.tipoDato;
-                }
-                else
-                {
-                    laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de alcances, identificador \"" + id + "\" no es una clase o arreglo." + ShowErrorPosition(idToken) + "\n";
-                    varType = TipoBasico.TiposBasicos.Error;
-                }
-                
-                if (varType == null)
-                {
-                    laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de alcances, identificador \"" + context.ident(0).GetText() + "\" no declarado en asignación." + ShowErrorPosition(context.ident(0).Start) + "\n";
-                    return TipoBasico.TiposBasicos.Error;
-                }
-                else if (varType is TipoBasico basicoType)
-                {
-                    return basicoType.tipoDato;
-                }
-                else if (varType is TipoClase claseTypo)
-                {
-                    return claseTypo.tipoDato;
-                }
-                else if (varType is Arreglo arregloType)
-                {
-                    if (context.expr().Length == 0)
-                    {
-                        return arregloType.tipoDato;
-                    }
-
-                    var exprType = (int)Visit(context.expr(0));
-                    if (exprType != (int)TipoBasico.TiposBasicos.Int)
-                    {
-                        laCsTablaSimbolos.consola.SalidaConsola.Text +=
-                            "Error: la expresión entre corchetes debe ser de tipo int" + ShowErrorPosition(context.expr(0).Start) + "\n";
-                        return TipoBasico.TiposBasicos.Error;
-                    }
+                    return ((Clase)varType).tok.Text;
                 }
             }
+
+        }
+        if (varType == null)
+        {
+            laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de alcances, identificador \"" + context.ident(0).GetText() + "\" no declarado en asignación." + ShowErrorPosition(context.ident(0).Start) + "\n";
+            return TipoBasico.TiposBasicos.Error;
         }
 
+        if (varType is TipoBasico basicoType)
+        {
+            return basicoType.tipoDato;
+        }
+
+        if (varType is TipoClase claseTypo)
+        {
+            return claseTypo.tipoDato;
+        }
+
+        if (varType is Arreglo arregloType)
+        {
+            if (context.INT() != null)
+            {
+                return TipoBasico.TiposBasicos.Int;
+            }
+    
+            var indexIdent = context.IDENTIFIER(0);
+            if (indexIdent != null)
+            {
+                var indexType = laCsTablaSimbolos.buscarObjetoTipo<TipoBasico>(indexIdent.GetText());
+                if (indexType != null && indexType.tipoDato == (int)TipoBasico.TiposBasicos.Int)
+                {
+                    return arregloType.tipoDato;
+                }
+        
+                laCsTablaSimbolos.consola.SalidaConsola.Text += "Error: el índice del arreglo debe ser de tipo int" + ShowErrorPosition(indexIdent.Symbol) + "\n";
+                return TipoBasico.TiposBasicos.Error;
+            }
+    
+            return arregloType.tipoDato;
+        }
         //laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de alcances, identificador \"" + context.ident(0).GetText() + "\" no declarado en asignación." + ShowErrorPosition(context.ident(0).Start) + "\n";
         return TipoBasico.TiposBasicos.Error;
     }
@@ -755,35 +769,35 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
     // retorna IToken
     public override object VisitIntIdIdentAST(MiniCSharpParser.IntIdIdentASTContext context)
     {
-        return context.INT_ID().Symbol;
+        return TipoBasico.TiposBasicos.Int;
     }
 
     // ident : CHAR_ID
     // retorna IToken
     public override object VisitCharIdIdentAST(MiniCSharpParser.CharIdIdentASTContext context)
     {
-        return context.CHAR_ID().Symbol;
+        return TipoBasico.TiposBasicos.Char;
     }
 
     // ident : DOUBLE_ID
     // retorna IToken
     public override object VisitDoubIdIdentAST(MiniCSharpParser.DoubIdIdentASTContext context)
     {
-        return context.DOUBLE_ID().Symbol;
+        return TipoBasico.TiposBasicos.Double;
     }
 
     // ident : BOOL_ID
     // retorna IToken
     public override object VisitBoolIdIdentAST(MiniCSharpParser.BoolIdIdentASTContext context)
     {
-        return context.BOOL_ID().Symbol;
+        return TipoBasico.TiposBasicos.Boolean;
     }
 
     // ident : STRING_ID
     // retorna IToken
     public override object VisitStrIdIdentAST(MiniCSharpParser.StrIdIdentASTContext context)
     {
-        return context.STRING_ID().Symbol;
+        return TipoBasico.TiposBasicos.String;
     }
 
     // ident : IDENTIFIER

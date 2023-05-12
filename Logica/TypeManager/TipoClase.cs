@@ -4,12 +4,10 @@ namespace miniChart.Logica.TypeManager;
 
 public class TipoClase : Tipo
 {
-    public readonly string tipo;
     public readonly string tipoDato;
     
-    public TipoClase(IToken tok, string td) : base(tok)
+    public TipoClase(IToken tok, string td) : base(tok, "tipoClase")
     {
-        tipo = "tipoClase";
         tipoDato = td;
     }
     

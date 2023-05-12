@@ -15,13 +15,11 @@ public class TipoBasico : Tipo
         Boolean,
         Error,
     }
-
-    public readonly string tipo;
+    
     public readonly int tipoDato;
     
-    public TipoBasico(IToken tok, int td) : base(tok)
+    public TipoBasico(IToken tok, int td) : base(tok, "basico")
     {
-        tipo = "basico";
         tipoDato = td;
     }
 

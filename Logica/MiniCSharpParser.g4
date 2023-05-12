@@ -63,7 +63,7 @@ ident : INT_ID                                                                  
         | LIST                                                                                                 #listIdentAST
         ;    
 
-designator : ident (DOT ident | LEFTSBRACK expr RIGHTSBRACK)*                                                  #designatorAST;
+designator : ident (DOT ident | LEFTSBRACK (IDENTIFIER|INT) RIGHTSBRACK)*                                      #designatorAST;
 
 relop : EQUALS                                                                                                  
         | NOTEQUALS                                                                                            
