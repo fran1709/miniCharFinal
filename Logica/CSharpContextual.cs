@@ -216,6 +216,7 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
     public override object VisitFormParsAST(MiniCSharpParser.FormParsASTContext context)
     {
         LinkedList<Object> parametros = new LinkedList<object>(); 
+        laCsTablaSimbolos.openScope();
         for (int i = 0; i < context.type().Length; i++)
         {
             int idType = (int)Visit(context.type(i));
@@ -240,6 +241,7 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
                 laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de tipos: Tipo: \"" + context.type(i).GetText() + "\" no es un tipo válido." + ShowErrorPosition(context.type(i).Start) + "\n";
             }
         }
+        laCsTablaSimbolos.CloseScope();
         return parametros;
     }
 
@@ -282,7 +284,8 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
     public override object VisitAssignStatementAST(MiniCSharpParser.AssignStatementASTContext context)
     {
         var idType = Visit(context.designator());
-        if (idType is TipoBasico.TiposBasicos type && (int)type == (int)TipoBasico.TiposBasicos.Error)
+        Metodo metodo = laCsTablaSimbolos.buscarObjetoTipo<Metodo>(context.designator().GetText());
+        if (idType is TipoBasico.TiposBasicos type && (int)type == (int)TipoBasico.TiposBasicos.Error && metodo == null)
         {
             laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de alcances, identificador \"" + context.designator().GetText() + "\" no declarado en asignación." + ShowErrorPosition(context.designator().Start) +"\n";
         }
@@ -294,11 +297,40 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
                 if (exprType is TipoBasico.TiposBasicos && !exprType.Equals(idType) || exprType is string type3 && !type3.Equals(idType))
                     laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de tipos: \""+ idType + "\" y \"" + exprType + "\" no son compatibles." + ShowErrorPosition(context.ASSIGN().Symbol) +"\n";
 
+                var arrayDsg = laCsTablaSimbolos.buscarObjetoTipo<Arreglo>(context.designator().GetText());
+                var arrayExpr = laCsTablaSimbolos.buscarObjetoTipo<Arreglo>(context.expr().GetText());
+                if (arrayDsg != null && arrayExpr != null)
+                {
+                    laCsTablaSimbolos.consola.SalidaConsola.Text += "Error: Asignación directa de arreglos \""+ context.designator().GetText() + "\" y \"" + context.expr().GetText() + "\" no permitida." + ShowErrorPosition(context.ASSIGN().Symbol) + "\n";
+                }
+
             }
                 
-        } else if (context.actPars() != null)
+        }
+        
+        if (metodo != null)
         {
-            Visit(context.actPars());
+            LinkedList<Object> pars = (LinkedList<Object>)Visit(context.actPars());
+            if (pars.Count != metodo.parametros.Count)
+            {
+                laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de parámetros: El método \"" + context.designator().GetText() + "\" espera " + metodo.parametros.Count() + " parámetros, pero se encontraron " + pars.Count + " parámetros." + ShowErrorPosition(context.designator().Start) + "\n";
+            }
+            else
+            {
+                var declParams = metodo.parametros.First;
+                var actParams = pars.First;
+                for (int i = 0; i < pars.Count; i++)
+                {
+                    Tipo declPar = (Tipo) declParams.Value;
+                    var actPar = actParams.Value;
+                    if (!Metodo.checkParsType(declPar, actPar))
+                    {
+                        laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de tipos: El tipo del parámetro en la posición " + (i + 1) + " no coincide con el tipo declarado." + ShowErrorPosition(context.designator().Start) + "\n";
+                    }
+                    declParams = declParams.Next;
+                    actParams = actParams.Next;
+                }
+            }
         }
         return null;
     }
@@ -395,14 +427,6 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
         return null;
     }
 
-
-    // statement : BREAK SEMICOLON  
-    public override object VisitBreakStatementAST(MiniCSharpParser.BreakStatementASTContext context)
-    {
-        // nothing to visit
-        return null;
-    }
-
     // statement : RETURN expr? SEMICOLON
     // modificar a futuro con implementacion de los metodos
     public override object VisitReturnStatementAST(MiniCSharpParser.ReturnStatementASTContext context)
@@ -484,15 +508,12 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
     // duda con la verificacion de tipos de los parametros de los metodos
     public override object VisitActParsAST(MiniCSharpParser.ActParsASTContext context)
     {
-        var type = Visit(context.expr(0));
-        if (context.expr().Length > 1)
+        LinkedList<Object> param = new LinkedList<object>(); 
+        for (int i = 0; i < context.expr().Length; i++)
         {
-            for (int i = 1; i < context.expr().Length; i++)
-            {
-                Visit(context.expr(i));
-            }
+            param.AddLast(Visit(context.expr(i)));
         }
-        return type;
+        return param;
     }
 
     // condition : condTerm (OR condTerm)*

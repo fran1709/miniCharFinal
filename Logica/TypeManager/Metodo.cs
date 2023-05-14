@@ -35,6 +35,25 @@ public class Metodo : Tipo
             default: return TipoMetodo.Error.ToString();
         }
     }
+    
+    public static bool checkParsType(Tipo declType, Object actType)
+    {
+        if (declType is TipoBasico basicoExpected && actType is int)
+        {
+            return basicoExpected.tipoDato == (int)actType;
+        }
+
+        if (declType is TipoClase claseExpected && actType is string)
+        {
+            return claseExpected.tipoDato == (string) actType;
+        }
+
+        if (declType is Arreglo arregloExpected && actType is int)
+        {
+            return arregloExpected.tipoDato == (int)actType;
+        }
+        return false;
+    }
 
     public string imprimirParametros()
     {
