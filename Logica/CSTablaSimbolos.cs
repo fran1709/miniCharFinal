@@ -35,7 +35,7 @@ public class CSTablaSimbolos
         }
         return null;
     }
-    
+
     public void openScope(){
         nivelActual++;
     }

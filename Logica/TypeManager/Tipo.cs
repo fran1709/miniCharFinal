@@ -6,6 +6,7 @@ public abstract class Tipo
     public IToken tok;
     public int nivel;
     public readonly string tipo;
+    public string MethodNombre { get; set; } 
 
     protected Tipo(IToken tok, string tipo)
     {

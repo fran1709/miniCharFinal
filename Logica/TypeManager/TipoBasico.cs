@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Antlr4.Runtime;
+﻿using Antlr4.Runtime;
 
 namespace miniChart.Logica.TypeManager;
 

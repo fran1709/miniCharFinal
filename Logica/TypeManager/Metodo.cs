@@ -14,7 +14,8 @@ public class Metodo : Tipo
     
     public readonly int tipoDato;
     public int cantidadParam;
-    public LinkedList<Object> parametros;   
+    public LinkedList<Object> parametros;  
+   
     public Metodo(IToken tok, int td) : base(tok, "metodo")
     {
         tipoDato = td;
@@ -36,7 +37,7 @@ public class Metodo : Tipo
         }
     }
     
-    public static bool checkParsType(Tipo declType, Object actType)
+    public static bool checkParsType(Object declType, Object actType)
     {
         if (declType is TipoBasico basicoExpected && actType is int)
         {
@@ -51,6 +52,11 @@ public class Metodo : Tipo
         if (declType is Arreglo arregloExpected && actType is int)
         {
             return arregloExpected.tipoDato == (int)actType;
+        }
+        
+        if (declType is int && actType is int)
+        {
+            return (int)declType == (int)actType;
         }
         return false;
     }
