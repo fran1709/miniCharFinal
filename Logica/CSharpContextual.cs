@@ -24,26 +24,6 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
         }
     }
 
-    public bool isNative(string methodName)
-    {
-        switch (methodName)
-        {
-            case "add": return true;
-            case "len": return true;
-            case "del": return true;
-            default: return false;
-        }
-    }
-    
-    private String showType(int type){
-        switch(type){
-            case 0: return "int";
-            case 1: return "double";
-            case 2: return "void";
-            default: return "none";
-        }
-    }
-    
     private String ShowErrorPosition(IToken t)
     {
         return " Fila: " + t.Line + " , Columna: " + (t.Column + 1);
@@ -66,7 +46,27 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
             Clase clase = new Clase(id);
             laCsTablaSimbolos.insertar(clase);
         }
+        
+        Metodo addMethod = new Metodo(null, (int)Metodo.TipoMetodo.Void);
+        addMethod.MethodNombre = "add";
+        addMethod.cantidadParam = 2;
+        addMethod.parametros.AddLast(new Arreglo(null, (int)Metodo.TipoMetodo.Multiple));
+        addMethod.parametros.AddLast(new TipoBasico(null, (int)Metodo.TipoMetodo.Multiple));
+        laCsTablaSimbolos.insertar(addMethod);
 
+        Metodo delMethod = new Metodo(null, (int)Metodo.TipoMetodo.Void);
+        delMethod.MethodNombre = "del";
+        delMethod.cantidadParam = 2;
+        delMethod.parametros.AddLast(new Arreglo(null, (int)Metodo.TipoMetodo.Multiple));
+        delMethod.parametros.AddLast(new TipoBasico(null, (int)TipoBasico.TiposBasicos.Int));
+        laCsTablaSimbolos.insertar(delMethod);
+        
+        Metodo lenMethod = new Metodo(null, (int)TipoBasico.TiposBasicos.Int);
+        lenMethod.MethodNombre = "len";
+        lenMethod.cantidadParam = 1;
+        lenMethod.parametros.AddLast(new Arreglo(null, (int)Metodo.TipoMetodo.Multiple));
+        laCsTablaSimbolos.insertar(lenMethod);
+     
         //Vista a la declaración de clases
         for (int i = 0; i < context.classDecl().Length; i++)
         {
@@ -86,7 +86,7 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
         {
             Visit(context.methodDecl(i));
         }
-        laCsTablaSimbolos.Imprimir(); //Impresión de la tabla como guía
+        laCsTablaSimbolos.CloseScope();
         laCsTablaSimbolos.consola.Show();
         return null;
     }
@@ -205,16 +205,18 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
             }
             Metodo metodo = new Metodo(id, idType);
         
+            
             //Visita a los parametros del método
             if (context.formPars() != null)
             {
                 metodo.parametros = (LinkedList<object>)Visit(context.formPars());
                 metodo.cantidadParam = metodo.parametros.Count;
             }
-            
+
             laCsTablaSimbolos.insertar(metodo);
             //Visita al bloque del método
             Visit(context.block());
+            laCsTablaSimbolos.CloseScope();
             
         }
         else
@@ -237,15 +239,18 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
             if (TipoBasico.isTipoBasico(context.type(i).GetText()))
             {
                 TipoBasico tb = new TipoBasico(id, idType);
+                laCsTablaSimbolos.insertar(tb);
                 parametros.AddLast(tb);
             } else if (TipoClase.IsTipoClase(context.type(i).GetText()))
             {
                 TipoClase tc = new TipoClase(id, context.type(i).GetText());
+                laCsTablaSimbolos.insertar(tc);
                 parametros.AddLast(tc);
             }
             else if (Arreglo.isTipoArreglo(context.type(i).GetText()))
             {
                 Arreglo arr = new Arreglo(id, idType);
+                laCsTablaSimbolos.insertar(arr);
                 parametros.AddLast(arr);
             }
             else
@@ -253,7 +258,6 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
                 laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de tipos: Tipo: \"" + context.type(i).GetText() + "\" no es un tipo válido." + ShowErrorPosition(context.type(i).Start) + "\n";
             }
         }
-        laCsTablaSimbolos.CloseScope();
         return parametros;
     }
 
@@ -297,21 +301,24 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
     {
         var idType = Visit(context.designator());
         Metodo metodo = laCsTablaSimbolos.buscarObjetoTipo<Metodo>(context.designator().GetText());
-        if (idType is TipoBasico.TiposBasicos type && (int)type == (int)TipoBasico.TiposBasicos.Error && (metodo == null && !isNative(context.designator().GetText())))
-        {
-            laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de alcances, identificador \"" + context.designator().GetText() + "\" no declarado en asignación." + ShowErrorPosition(context.designator().Start) +"\n";
-        }
-            
+
         if (context.expr() != null)
         {
-            var exprType = Visit(context.expr());
-            if (metodo != null && metodo.tok.Text.Equals(context.designator().GetText()))
+            if (laCsTablaSimbolos.buscarObjetoTipo<Tipo>(context.designator().GetText()) != null)
             {
-                laCsTablaSimbolos.consola.SalidaConsola.Text += "Error: Las instrucciones de retorno no están permitidas fuera de los métodos." + ShowErrorPosition(context.designator().Start) + "\n";
+                laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de alcances, identificador \"" + context.designator().GetText() + "\" no declarado en asignación." + ShowErrorPosition(context.designator().Start) +"\n";
             }
             
+            var exprType = Visit(context.expr());
             if (exprType is TipoBasico.TiposBasicos && !exprType.Equals(idType) || exprType is string type3 && !type3.Equals(idType))
-                laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de tipos: \""+ idType + "\" y \"" + exprType + "\" no son compatibles." + ShowErrorPosition(context.ASSIGN().Symbol) +"\n";
+            {
+                if (idType is int)
+                {
+                    laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de tipos: \""+ (TipoBasico.TiposBasicos)idType + "\" y \"" + exprType + "\" no son compatibles." + ShowErrorPosition(context.ASSIGN().Symbol) +"\n";
+                }
+                else
+                    laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de tipos: \""+ idType + "\" y \"" + exprType + "\" no son compatibles." + ShowErrorPosition(context.ASSIGN().Symbol) +"\n";
+            }
 
             var arrayDsg = laCsTablaSimbolos.buscarObjetoTipo<Arreglo>(context.designator().GetText());
             var arrayExpr = laCsTablaSimbolos.buscarObjetoTipo<Arreglo>(context.expr().GetText());
@@ -319,9 +326,14 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
             {
                 laCsTablaSimbolos.consola.SalidaConsola.Text += "Error: Asignación directa de arreglos \""+ context.designator().GetText() + "\" y \"" + context.expr().GetText() + "\" no permitida." + ShowErrorPosition(context.ASSIGN().Symbol) + "\n";
             }
+        }
 
-            
-                
+        if (context.actPars() != null)
+        {
+            if (metodo == null)
+            {
+                laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de alcances, identificador \"" + context.designator().GetText() + "\" no declarado en asignación." + ShowErrorPosition(context.designator().Start) +"\n";
+            }
         }
         
         if (metodo != null && context.actPars() != null)
@@ -339,117 +351,53 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
                 {
                     Tipo declPar = (Tipo) declParams.Value;
                     var actPar = actParams.Value;
-                    if (!Metodo.checkParsType(declPar, actPar))
+                    if (declPar is Arreglo arreglo && arreglo.tipoDato == (int)Metodo.TipoMetodo.Multiple || declPar is TipoBasico basico && basico.tipoDato == (int)Metodo.TipoMetodo.Multiple)
                     {
-                        laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de tipos: El tipo del parámetro en la posición " + (i + 1) + " no coincide con el tipo declarado." + ShowErrorPosition(context.designator().Start) + "\n";
+                        if (!Metodo.checkParsType((int)TipoBasico.TiposBasicos.Int, (int)actPar) && !Metodo.checkParsType((int)TipoBasico.TiposBasicos.Char, (int)actPar))
+                        {
+                            laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de tipos: El tipo del parámetro en la posición " + (i + 1) + " no coincide con el tipo declarado." + ShowErrorPosition(context.designator().Start) + "\n";
+                        }
+                    }
+                    else {
+                        if (!Metodo.checkParsType(declPar, actPar)) 
+                        {
+                            laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de tipos: El tipo del parámetro en la posición " + (i + 1) + " no coincide con el tipo declarado." + ShowErrorPosition(context.designator().Start) + "\n"; 
+                        }
                     }
                     declParams = declParams.Next;
                     actParams = actParams.Next;
                 }
             }
-        } 
-        else if (context.designator().GetText().Equals("add"))
-        {
-            LinkedList<object> pars = (LinkedList<object>)Visit(context.actPars());
-            if (pars.Count != 2)
-            {
-                laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de parámetros: El método \"" + context.designator().GetText() + "\" espera " + metodo.parametros.Count() + " parámetros, pero se encontraron " + pars.Count + " parámetros." + ShowErrorPosition(context.designator().Start) + "\n";
-            }
-            var actParams = pars.First;
-            var paramNames = context.actPars().GetText();
-            string[] pName = paramNames.Split(',');
-            var array = laCsTablaSimbolos.buscarObjetoTipo<Arreglo>(pName[0]);
-            if (array == null)
-            {
-                laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de tipos: El tipo del parámetro en la posición 1 del metodo \"" + context.designator().GetText() + "\" debe ser \"array\""  + ShowErrorPosition(context.designator().Start) + "\n";
-            }
-            else
-            {
-                for (int i = 0; i < pars.Count; i++)
-                {
-                    var actPar = actParams.Value;
-                    if (!Metodo.checkParsType(array.tipoDato, (int)actPar) || laCsTablaSimbolos.buscarObjetoTipo<Arreglo>(pName[1]) != null)
-                    {
-                        laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de tipos: El tipo del parámetro en la posición " + (i + 1) + " no coincide con el tipo declarado." + ShowErrorPosition(context.designator().Start) + "\n";
-                    }
-                    actParams = actParams.Next;
-                }
-            }
-        } 
-        else if (context.designator().GetText().Equals("del"))
-        {
-            LinkedList<object> pars = (LinkedList<object>)Visit(context.actPars());
-            if (pars.Count != 2)
-            {
-                laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de parámetros: El método \"" + context.designator().GetText() + "\" espera " + metodo.parametros.Count() + " parámetros, pero se encontraron " + pars.Count + " parámetros." + ShowErrorPosition(context.designator().Start) + "\n";
-            }
-            var actParams = pars.First;
-            var paramNames = context.actPars().GetText();
-            string[] pName = paramNames.Split(',');
-            var array = laCsTablaSimbolos.buscarObjetoTipo<Arreglo>(pName[0]);
-            if (array == null)
-            {
-                laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de tipos: El tipo del parámetro en la posición 1 del metodo \"" + context.designator().GetText() + "\" debe ser \"array\""  + ShowErrorPosition(context.designator().Start) + "\n";
-            }
-            else
-            {
-                actParams = actParams.Next;
-                var actPar = actParams.Value;
-                if (!Metodo.checkParsType(0, (int)actPar) || laCsTablaSimbolos.buscarObjetoTipo<Arreglo>(pName[1]) != null)
-                {
-                    laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de tipos: El tipo del parámetro en la posición " + (2) + " no coincide con el tipo declarado." + ShowErrorPosition(context.designator().Start) + "\n";
-                }
-            }
         }
-        else if (context.designator().GetText().Equals("len"))
-        {
-            LinkedList<object> pars = (LinkedList<object>)Visit(context.actPars());
-            if (pars.Count != 1)
-            {
-                laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de parámetros: El método \"" + context.designator().GetText() + "\" espera " + metodo.parametros.Count() + " parámetros, pero se encontraron " + pars.Count + " parámetros." + ShowErrorPosition(context.designator().Start) + "\n";
-            }
-            var paramNames = context.actPars().GetText();
-            string[] pName = paramNames.Split(',');
-            var array = laCsTablaSimbolos.buscarObjetoTipo<Arreglo>(pName[0]);
-            if (array == null)
-            {
-                laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de tipos: El tipo del parámetro en la posición 1 del metodo \"" + context.designator().GetText() + "\" debe ser \"array\""  + ShowErrorPosition(context.designator().Start) + "\n";
-            }
-        }
-        
         if (context.Parent is MiniCSharpParser.BlockASTContext blockContext)
         {
-            // Check if the grandparent context is the method declaration
             if (blockContext.Parent is MiniCSharpParser.MethDeclaASTContext methodDeclContext)
             {
-                // Get the method name
                 string methodName = methodDeclContext.ident().GetText();
-                
-
-                // Get the return type of the method
                 Metodo returnType = laCsTablaSimbolos.buscarObjetoTipo<Metodo>(methodName);
-
-                // Check if there is an expression in the assignment statement
                 if (context.expr() != null)
                 {
-                    // Visit the expression
                     var exprType = Visit(context.expr());
-
-                    // Check if the return type matches the type of the expression
-                    if (returnType.tipoDato != (int)Metodo.TipoMetodo.Void && returnType.tipoDato != (int)Metodo.TipoMetodo.Error)
+                    if (returnType.tipoDato != (int)Metodo.TipoMetodo.Void &&
+                        returnType.tipoDato != (int)Metodo.TipoMetodo.Error)
                     {
                         if ((exprType is int && returnType.tipoDato is int) && returnType.tipoDato != (int)exprType)
                         {
                             laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de tipos: El tipo de retorno del método \"" + methodName + "\" no coincide con el tipo de la expresión de retorno." + ShowErrorPosition(context.ASSIGN().Symbol) + "\n";
                         }
                     }
-                }
-                else
-                {
-                    laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de retorno: El método \"" + methodName + "\" debe tener una expresión de retorno." + ShowErrorPosition(methodDeclContext.RIGHTPAREN().Symbol) + "\n";
+                    if (returnType.tipoDato != (int)Metodo.TipoMetodo.Void && returnType.tipoDato == (int)Metodo.TipoMetodo.Error)
+                    {
+                        laCsTablaSimbolos.consola.SalidaConsola.Text += "Error de retorno: El método \"" + methodName + "\" debe tener una expresión de retorno." + ShowErrorPosition(methodDeclContext.RIGHTPAREN().Symbol) + "\n";
+                    }
                 }
             }
+            else
+            {
+                laCsTablaSimbolos.consola.SalidaConsola.Text += "Error: Las instrucciones de retorno no están permitidas fuera de los métodos." + ShowErrorPosition(context.designator().Start) + "\n";
+            }
         }
+
         return null;
     }
 
@@ -470,11 +418,11 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
         {
             Visit(context.statement(1));
         }
+        laCsTablaSimbolos.CloseScope();
         return tipoCondicion;
     }
 
     // statement : FOR LEFTPAREN expr SEMICOLON condition? SEMICOLON statement? RIGHTPAREN statement
-    //TODO VERIFICAR SI HAY MAS CHEQUEOS DE TIPO QUE HACER AQUÍ
     public override object VisitForStatementAST(MiniCSharpParser.ForStatementASTContext context)
     {
         var tipoExpr = Visit(context.expr());
@@ -832,12 +780,17 @@ public class CSharpContextual : MiniCSharpParserBaseVisitor<Object>
 
         if (varType is TipoBasico basicoType)
         {
-            return basicoType.tipoDato;
+            return (TipoBasico.TiposBasicos)basicoType.tipoDato;
         }
 
         if (varType is TipoClase claseTypo)
         {
             return claseTypo.tipoDato;
+        }
+        
+        if (varType is Metodo metodoType)
+        {
+            return metodoType.tipoDato;
         }
 
         if (varType is Arreglo arregloType)

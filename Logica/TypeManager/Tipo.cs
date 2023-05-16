@@ -8,6 +8,7 @@ public abstract class Tipo
     public readonly string tipo;
     public string MethodNombre { get; set; } 
 
+
     protected Tipo(IToken tok, string tipo)
     {
         this.tok = tok;

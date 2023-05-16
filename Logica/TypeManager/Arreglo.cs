@@ -26,6 +26,10 @@ public class Arreglo : Tipo
     
     public override string ToString()
     {
+        if (tok == null)
+        {
+            return $"Token: arrayParam, Tipo: {tipo}, Tipo de dato: {showTipo(tipoDato)}, Nivel: {nivel} " + "\n";
+        }
         return $"Token: {tok.Text}, Tipo: {tipo}, Tipo de dato: {showTipo(tipoDato)}, Nivel: {nivel} " + "\n";
     }
     
@@ -35,6 +39,7 @@ public class Arreglo : Tipo
         {
             case (int)TiposArreglo.Int: return TiposArreglo.Int.ToString().ToLower();
             case (int)TiposArreglo.Char: return TiposArreglo.Char.ToString().ToLower();
+            case (int)Metodo.TipoMetodo.Multiple: return Metodo.TipoMetodo.Multiple.ToString().ToLower();
             default: return TiposArreglo.Error.ToString();
         }
     }

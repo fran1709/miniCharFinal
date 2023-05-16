@@ -10,12 +10,13 @@ public class Metodo : Tipo
     {
         Void = 7,
         Error = 8,
+        Multiple = -99,
     }
     
     public readonly int tipoDato;
     public int cantidadParam;
-    public LinkedList<Object> parametros;  
-   
+    public LinkedList<Object> parametros;
+    
     public Metodo(IToken tok, int td) : base(tok, "metodo")
     {
         tipoDato = td;
@@ -77,6 +78,11 @@ public class Metodo : Tipo
     }
     public override string ToString()
     {
+        if (tok == null)
+        {
+            return $"Token: {MethodNombre}, Tipo: {tipo}, Tipo de dato: {showTipo(tipoDato)}, Nivel: {nivel}, Cantidad de parametros: {cantidadParam}" + "\n" + imprimirParametros();
+
+        }
         return $"Token: {tok.Text}, Tipo: {tipo}, Tipo de dato: {showTipo(tipoDato)}, Nivel: {nivel}, Cantidad de parametros: {cantidadParam}" + "\n" + imprimirParametros();
     }
 }

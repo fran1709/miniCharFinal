@@ -28,9 +28,17 @@ public class CSTablaSimbolos
         foreach (object id in tabla)
         {
             T obj = id as T;
-            if (obj != null && obj.tok.Text.Equals(nombre))
+            if (obj != null)
             {
-                return obj;
+                if (obj.tok != null && obj.tok.Text.Equals(nombre))
+                {
+                    return obj;
+                }
+                if (obj.tok == null && obj.MethodNombre.Equals(nombre))
+                {
+                    return obj;
+                }
+
             }
         }
         return null;
@@ -42,7 +50,6 @@ public class CSTablaSimbolos
     
     public void CloseScope()
     {
-        Imprimir();
         foreach (var item in tabla.ToList())
         {
             if (((Tipo)item).nivel == nivelActual)

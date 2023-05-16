@@ -35,12 +35,17 @@ public class TipoBasico : Tipo
             case (int)TiposBasicos.Char: return TiposBasicos.Char.ToString().ToLower();
             case (int)TiposBasicos.String: return TiposBasicos.String.ToString().ToLower();
             case (int)TiposBasicos.Boolean: return TiposBasicos.Boolean.ToString().ToLower();
+            case (int)Metodo.TipoMetodo.Multiple: return Metodo.TipoMetodo.Multiple.ToString().ToLower();
             default: return TiposBasicos.Error.ToString().ToLower();
         }
     }
 
     public override string ToString()
     {
+        if (tok == null)
+        {
+            return $"Token: multipleParam, Tipo: {tipo}, Tipo de dato: {showTipo(tipoDato)}, Nivel: {nivel} " + "\n";
+        }
         return $"Token: {tok.Text}, Tipo: {tipo}, Tipo de dato: {showTipo(tipoDato)}, Nivel: {nivel} " + "\n";
     }
 }
