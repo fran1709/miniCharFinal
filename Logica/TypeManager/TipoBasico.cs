@@ -1,4 +1,5 @@
-﻿using Antlr4.Runtime;
+﻿using System;
+using Antlr4.Runtime;
 
 namespace miniChart.Logica.TypeManager;
 
@@ -14,16 +15,15 @@ public class TipoBasico : Tipo
         Error,
     }
     
-    public readonly int tipoDato;
+    public int tipoDato;
     
     public TipoBasico(IToken tok, int td) : base(tok, "basico")
     {
         tipoDato = td;
     }
-
     public static bool isTipoBasico(string tipo)
     {
-        return tipo.Equals("int") || tipo.Equals("double") || tipo.Equals("char") || tipo.Equals("string") || tipo.Equals("boolean");
+        return tipo.Equals("int") || tipo.Equals("double") || tipo.Equals("char") || tipo.Equals("string") || tipo.Equals("bool");
     }
     
     public static string showTipo(int tipoDato)

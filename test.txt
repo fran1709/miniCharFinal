@@ -5,6 +5,7 @@ class P
 	class Table {
 		int[] pos;
 		int[] neg;
+		int elnumero;
 	}
 	
 	class Table {
@@ -13,8 +14,8 @@ class P
     }
 	
 	Table val;
-	int GetX (Table p, int x) { GetX = 0.1; }
-	int GetY(bool isY, int y) { y = 0; }
+	//int GetX (Table p, int x) { GetX = 0; }
+	//int GetY(bool isY, int y) { y = 0; }
 	
   void Main ()
 	{
@@ -24,7 +25,8 @@ class P
 		GetX(x,i);
 		GetX(x,i,val);
 		GetX = 10;
-
+		
+		val.elnumero = 10;
 	
 		//---------- Initialize val ----------
 		val = new Table;

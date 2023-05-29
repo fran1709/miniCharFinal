@@ -25,6 +25,8 @@ public class CSTablaSimbolos
     }
     public T buscarObjetoTipo<T>(string nombre) where T : Tipo
     {
+        T localVar = null;
+        T globalVar = null;
         foreach (object id in tabla)
         {
             T obj = id as T;
@@ -32,16 +34,41 @@ public class CSTablaSimbolos
             {
                 if (obj.tok != null && obj.tok.Text.Equals(nombre))
                 {
-                    return obj;
+                    if (obj.nivel == nivelActual)
+                    {
+                        return obj;
+                    }
+                    if (localVar == null)
+                    {
+                        globalVar = obj;
+                    }
                 }
                 if (obj.tok == null && obj.MethodNombre.Equals(nombre))
                 {
-                    return obj;
+                    if (obj.nivel == nivelActual)
+                    {
+                        return obj;
+                    }
+                    if (localVar == null)
+                    {
+                        globalVar = obj;
+                    }
                 }
-
             }
         }
-        return null;
+        return localVar ?? globalVar;
+    }
+    
+    public void CastVariable(string nombre, int nuevoType)
+    {
+        foreach (object id in tabla)
+        {
+            if (id is TipoBasico variable && variable.tok.Text == nombre)
+            {
+                variable.tipoDato = nuevoType;
+                return; 
+            }
+        }
     }
 
     public void openScope(){
@@ -62,14 +89,14 @@ public class CSTablaSimbolos
     
     public void Imprimir()
     {
-        Console.WriteLine("----- INICIO TABLA ------");
-        consola.SalidaConsola.Text += "----- INICIO TABLA ------\n";
+        System.Diagnostics.Debug.WriteLine("----- INICIO TABLA ------");
+        //consola.SalidaConsola.Text += "----- INICIO TABLA ------\n";
         foreach (object id in tabla)
         {
-            Console.WriteLine(id.ToString());
-            consola.SalidaConsola.Text += id.ToString();
+            System.Diagnostics.Debug.WriteLine(id.ToString());
+            //consola.SalidaConsola.Text += id.ToString();
         }
-        Console.WriteLine("----- FIN TABLA ------");
-        consola.SalidaConsola.Text += "----- FIN TABLA ------\n";
+        System.Diagnostics.Debug.WriteLine("----- FIN TABLA ------");
+        //consola.SalidaConsola.Text += "----- FIN TABLA ------\n";
     }
 }

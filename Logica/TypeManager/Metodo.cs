@@ -44,6 +44,11 @@ public class Metodo : Tipo
         {
             return basicoExpected.tipoDato == (int)actType;
         }
+        
+        if (declType is TipoBasico expected && actType is TipoBasico.TiposBasicos)
+        {
+            return expected.tipoDato == (int)actType;
+        }
 
         if (declType is TipoClase claseExpected && actType is string)
         {
